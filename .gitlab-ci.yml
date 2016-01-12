@@ -18,8 +18,8 @@ deploy_job:
   stage: deploy
   script:
     - cd $DEPLOY_DIRECTORY && git pull
-    - docker exec lumen php composer.phar install
-    - docker exec lumen php artisan migrate
+    - docker exec pipes.noprobe.co.uk php composer.phar install
+    - docker exec pipes.noprobe.co.uk php artisan migrate
   only:
     - master
   tags:
