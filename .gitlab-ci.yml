@@ -1,8 +1,10 @@
 stages:
   - test
   - deploy
+
 php_test_job:
   image: registry.noprobe.co.uk/lumen:5.1
+  stage: test
   script:
     - php composer.phar install
     - cp .env.testing .env
@@ -12,6 +14,7 @@ php_test_job:
     - docker
 
 deploy_job:
+  stage: deploy
   script:
     - cd $DEPLOY_DIRECTORY && git pull
     - docker exec lumen php composer.phar install
