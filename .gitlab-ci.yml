@@ -1,0 +1,9 @@
+php_tests:
+  image: registry.drp.digital/php:7
+  script:
+    - php composer.phar install
+    - cp .env.testing .env
+    - touch database/database.sqlite
+    - php artisan migrate
+  tags:
+    - docker
