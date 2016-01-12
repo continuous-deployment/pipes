@@ -1,5 +1,8 @@
-php_tests:
-  image: registry.drp.digital/php:7
+stages:
+  - test
+  - deploy
+php_test_job:
+  image: registry.noprobe.co.uk/lumen:5.1
   script:
     - php composer.phar install
     - cp .env.testing .env
@@ -7,3 +10,13 @@ php_tests:
     - php artisan migrate
   tags:
     - docker
+
+deploy_job:
+  script:
+    - cd $DEPLOY_DIRECTORY && git pull
+    - docker exec lumen php composer.phar install
+    - docker exec lumen php artisan migrate
+  only:
+    - master
+  tags:
+    - pipes.noprobe.co.uk
