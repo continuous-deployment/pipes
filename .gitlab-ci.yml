@@ -24,3 +24,14 @@ deploy_job:
     - master
   tags:
     - pipes.noprobe.co.uk
+
+deploy_dev_job:
+  stage: deploy
+  script:
+    - cd $DEVELOPMENT_DEPLOY_DIRECTORY && git pull
+    - docker exec dev.pipes.noprobe.co.uk php composer.phar install
+    - docker exec dev.pipes.noprobe.co.uk php artisan migrate
+  only:
+    - development
+  tags:
+    - dev.pipes.noprobe.co.uk
