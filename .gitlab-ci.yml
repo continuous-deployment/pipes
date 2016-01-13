@@ -4,7 +4,7 @@ stages:
   - deploy
 
 php_test_job:
-  image: registry.noprobe.co.uk/lumen:5.1
+  image: registry.noprobe.co.uk/nginx-phpfpm
   stage: test
   script:
     - php composer.phar install
