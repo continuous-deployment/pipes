@@ -1,4 +1,5 @@
 <?php
+use App\Api\GitLab\GitLab;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,15 @@ $app->get('/', function () use ($app) {
 });
 
 // route for easier testing using query strings
-$app->get('/hooks/catch',  [
+$app->get('/hooks/catch', [
     'as' => 'hook', 'uses' => 'HookController@recieve'
 ]);
-$app->post('/hooks/catch',  [
+$app->post('/hooks/catch', [
     'as' => 'hook', 'uses' => 'HookController@recieve'
 ]);
+
+$app->get('test/auth', function () {
+    $auth = new GitLab();
+    $auth->authenticate();
+    dd($auth->getPrivateToken());
+});
