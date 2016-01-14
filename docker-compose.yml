@@ -1,0 +1,16 @@
+php:
+  image: registry.noprobe.co.uk/nginx-phpfpm
+  ports:
+    - "9000:80"
+  volumes:
+    - .:/var/www
+    - .docker/nginx/sites-enabled:/etc/nginx/sites-enabled
+  links:
+    - mysql:mysql
+
+mysql:
+  image: dydx/alpine-mariadb
+  ports:
+    - "3309:3306"
+  volumes:
+    - .docker/db/data:/var/lib/mysql

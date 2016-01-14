@@ -1,21 +1,30 @@
-## Lumen PHP Framework
+# Pipes #
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+### Installation via docker ###
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Docker Compose is set up for this repository
 
-## Official Documentation
+docker-compose will need to be installed on your system https://docs.docker.com/compose/install
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+```bash
+docker-compose up
+```
 
-## Security Vulnerabilities
+This will download and link all required containers and host your application on port 9000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+It will auto name the containers with a prefix of the folder name and suffixed with a number starting from 1.
 
-### License
+e.g. the folder is called pipes the containers created will be called:
+- pipes_php_1
+- pipes_mysql_1
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+To run commands inside the container you can open up a shell:
+```bash
+docker exec -it pipes_php_1 bash
+```
+
+or you ca run the command you want directly:
+```bash
+docker exec -it pipes_php_1 php composer.phar install
+```
