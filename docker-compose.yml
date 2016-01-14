@@ -14,3 +14,10 @@ mysql:
     - "3309:3306"
   volumes:
     - .docker/db/data:/var/lib/mysql
+
+runner:
+  image: registry.noprobe.co.uk/pipes-runner
+  volumes_from:
+    - php
+  links:
+    - mysql:mysql
