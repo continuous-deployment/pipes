@@ -9,7 +9,7 @@ php:
     - mysql:mysql
 
 mysql:
-  image: dydx/alpine-mariadb
+  image: registry.noprobe.co.uk/mariadb
   ports:
     - "3309:3306"
   volumes:
