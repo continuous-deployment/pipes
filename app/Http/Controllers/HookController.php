@@ -9,6 +9,7 @@ use App\Api\GitLab\HookRegister;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Commit;
 
 class HookController extends Controller
 {
@@ -36,6 +37,18 @@ class HookController extends Controller
             $projectId = $data['project_id'];
             $register = new HookRegister();
             $register->registerWithProjectId($projectId);
+        }
+        if (array_key_exists('object_kind', $data) && $data['object_kind'] == 'push') {
+          foreach($data['commits'] as $recievedCommit){
+            $commit = new Commit;
+            $commit->commit_id = $commit['id'];
+            $commit->message = $commit['message'];
+            $commit->url = $commit['url'];
+            $commit->timestamp = $commit['timestamp'];
+            $commit->author_name = $commit['author']['name'];
+            $commit->author_email = $commit['author']['email'];
+            $commit->save;
+          }
         }
 
         return $data;
