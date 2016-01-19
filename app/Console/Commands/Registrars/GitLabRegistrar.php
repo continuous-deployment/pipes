@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Registrars;
 
 use App\Api\GitLab\GitLab;
+use App\Api\GitLab\HookRegister;
 use App\Api\GitLab\GitLabManager;
 use Illuminate\Console\Command;
 
@@ -115,7 +116,8 @@ class GitLabRegistrar implements Registrar
         );
 
         if ($register) {
-            $this->gitlabManager->registerSystemHooksOnInstances();
+            $hookRegister = new HookRegister($this->gitlabManager);
+            $hookRegister->registerSystemHooksOnInstances();
         }
     }
 
