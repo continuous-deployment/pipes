@@ -42,30 +42,47 @@ class GitLab
     protected $user;
 
     /**
+     * Private token to be used with Api requests to GitLab
+     * @var string
+     */
+    protected $privateToken;
+
+    /**
      * Creates a GitLab Auth instance
      * @param string $username Username to authenticate with GitLab
      * @param string $password Password to authenticate with GitLab
      * @param string $host     Host for the GitLab to authenticate with
      */
     public function __construct(
+        $number = '',
         $username = '',
         $password = '',
+        $privateToken = '',
         $host = ''
     ) {
+        if ($number != '') {
+            $number = '_' . $number;
+        }
+
         if (empty($username)) {
-            $username = env('GITLAB_AUTH_USER');
+            $username = env('GITLAB_AUTH_USER' . $number);
         }
 
         if (empty($password)) {
-            $password = env('GITLAB_AUTH_PASS');
+            $password = env('GITLAB_AUTH_PASS' . $number);
         }
 
         if (empty($host)) {
-            $host = env('GITLAB_URL');
+            $host = env('GITLAB_URL' . $number);
+        }
+
+        if (empty($privateToken)) {
+            $privateToken = env('GITLAB_AUTH_PRIVATE_TOKEN' . $number);
         }
 
         $this->username = $username;
         $this->password = $password;
+        $this->privateToken = $privateToken;
         $this->host = $host;
     }
 
