@@ -186,4 +186,47 @@ class GitLab
     {
         return $this->user;
     }
+
+    /**
+     * Get the username used to authenticate with GitLab
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Get the password used to authenticate with GitLab
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Checks if the GitLab instance as tried to authenticate.
+     * @return bool
+     */
+    public function hasAuthenticated()
+    {
+        return $this->user != null;
+    }
+
+    /**
+     * Checks if the config has been loaded from envs or passed in via parameters
+     * @return boolean
+     */
+    public function configLoaded()
+    {
+        $hasUsernameCred =  $this->username != '' &&
+            $this->password != '' &&
+            $this->host != '';
+
+        $hasPrivateKeyCred = $this->privateToken != '' &&
+            $this->host != '';
+
+        return $hasUsernameCred || $hasPrivateKeyCred;
+    }
 }
