@@ -83,18 +83,4 @@ class GitLabManager
             $instance->sendApiRequest($method, $path, $formParams);
         }
     }
-
-    /**
-     * Register system hooks on all the gitlab instances
-     */
-    public function registerSystemHooksOnInstances()
-    {
-        $this->sendApiRequestToInstances(
-            'POST',
-            'hooks',
-            [
-                'url' => env('PIPES_URL')
-            ]
-        );
-    }
 }

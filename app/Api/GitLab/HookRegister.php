@@ -47,4 +47,18 @@ class HookRegister
             ]
         );
     }
+
+    /**
+     * Register system hooks on all the gitlab instances
+     */
+    public function registerSystemHooksOnInstances()
+    {
+        $this->gitlab->sendApiRequestToInstances(
+            'POST',
+            'hooks',
+            [
+                'url' => env('PIPES_URL')
+            ]
+        );
+    }
 }
