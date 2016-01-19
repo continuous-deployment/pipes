@@ -149,11 +149,24 @@ class GitLab
      */
     public function getPrivateToken()
     {
+        if ($this->privateToken != '') {
+            return $this->privateToken;
+        }
+
         if (null === $this->user) {
             $this->authenticate();
         }
 
         return $this->user->private_token;
+    }
+
+    /**
+     * Gets the private token property value
+     * @return string
+     */
+    public function getPrivateTokenProperty()
+    {
+        return $this->privateToken;
     }
 
     /**
