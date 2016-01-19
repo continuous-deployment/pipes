@@ -3,19 +3,24 @@
 namespace App\Api\GitLab;
 
 use GuzzleHttp;
+use App\Api\GitLab\GitLabManager;
 
 class HookRegister
 {
     /**
-     * GitLab instance
-     * @var GitLab
+     * GitLabManager instance
+     * @var GitLabManager
      */
     protected $gitlab;
 
-    public function __construct(GitLab $gitlab = null)
+    /**
+     * Constructor
+     * @param GItLabManager $gitlab
+     */
+    public function __construct(GitLabManager $gitlab = null)
     {
         if ($gitlab == null) {
-            $gitlab = app(GitLab::class);
+            $gitlab = app(GitLabManager::class);
         }
 
         $this->gitlab = $gitlab;
@@ -27,7 +32,7 @@ class HookRegister
      */
     public function registerWithProjectId($projectId)
     {
-        $this->gitlab->sendApiRequest(
+        $this->gitlab->sendApiRequestToInstances(
             'POST',
             'projects/' . $projectId . '/hooks',
             [
