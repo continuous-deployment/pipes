@@ -92,10 +92,17 @@ class GitLab
      */
     public function authenticate()
     {
-        $response = $this->sendApiRequest('POST', 'session', [
-            'login'    => $this->username,
-            'password' => $this->password,
-        ], false);
+        // If we already have the private token and not the user object then
+        // go grab the user object.
+        if ($this->privateToken != '' && $this->user == '') {
+            $response = $this->sendApiRequest('GET', 'user');
+        } else {
+            $response = $this->sendApiRequest('POST', 'session', [
+                'login'    => $this->username,
+                'password' => $this->password,
+            ], false);
+        }
+
 
         $this->user = json_decode($response->getBody()->getContents());
 
