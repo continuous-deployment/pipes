@@ -57,7 +57,7 @@ class HookRegister
             'POST',
             'hooks',
             [
-                'url' => env('PIPES_URL')
+                'url' => env('PIPES_URL') . '/hooks/catch'
             ]
         );
     }
