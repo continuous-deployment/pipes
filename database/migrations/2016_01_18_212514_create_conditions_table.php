@@ -20,6 +20,8 @@ class CreateConditionsTable extends Migration
             $table->string('group_name');
             // type such as IF
             $table->string('type');
+            // Field to check value against
+            $table->string('field');
             // Equal to, more than, of type
             $table->string('operator');
             // IF $CI_BUILD passed, Type is Issue, etc...
