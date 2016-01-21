@@ -42,30 +42,47 @@ class GitLab
     protected $user;
 
     /**
+     * Private token to be used with Api requests to GitLab
+     * @var string
+     */
+    protected $privateToken;
+
+    /**
      * Creates a GitLab Auth instance
      * @param string $username Username to authenticate with GitLab
      * @param string $password Password to authenticate with GitLab
      * @param string $host     Host for the GitLab to authenticate with
      */
     public function __construct(
+        $number = '',
         $username = '',
         $password = '',
+        $privateToken = '',
         $host = ''
     ) {
+        if ($number != '') {
+            $number = '_' . $number;
+        }
+
         if (empty($username)) {
-            $username = env('GITLAB_AUTH_USER');
+            $username = env('GITLAB_AUTH_USER' . $number);
         }
 
         if (empty($password)) {
-            $password = env('GITLAB_AUTH_PASS');
+            $password = env('GITLAB_AUTH_PASS' . $number);
         }
 
         if (empty($host)) {
-            $host = env('GITLAB_URL');
+            $host = env('GITLAB_URL' . $number);
+        }
+
+        if (empty($privateToken)) {
+            $privateToken = env('GITLAB_AUTH_PRIVATE_TOKEN' . $number);
         }
 
         $this->username = $username;
         $this->password = $password;
+        $this->privateToken = $privateToken;
         $this->host = $host;
     }
 
@@ -75,10 +92,17 @@ class GitLab
      */
     public function authenticate()
     {
-        $response = $this->sendApiRequest('POST', 'session', [
-            'login'    => $this->username,
-            'password' => $this->password,
-        ], false);
+        // If we already have the private token and not the user object then
+        // go grab the user object.
+        if ($this->privateToken != '' && $this->user == '') {
+            $response = $this->sendApiRequest('GET', 'user');
+        } else {
+            $response = $this->sendApiRequest('POST', 'session', [
+                'login'    => $this->username,
+                'password' => $this->password,
+            ], false);
+        }
+
 
         $this->user = json_decode($response->getBody()->getContents());
 
@@ -125,11 +149,24 @@ class GitLab
      */
     public function getPrivateToken()
     {
+        if ($this->privateToken != '') {
+            return $this->privateToken;
+        }
+
         if (null === $this->user) {
             $this->authenticate();
         }
 
         return $this->user->private_token;
+    }
+
+    /**
+     * Gets the private token property value
+     * @return string
+     */
+    public function getPrivateTokenProperty()
+    {
+        return $this->privateToken;
     }
 
     /**
@@ -148,5 +185,48 @@ class GitLab
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Get the username used to authenticate with GitLab
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Get the password used to authenticate with GitLab
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Checks if the GitLab instance as tried to authenticate.
+     * @return bool
+     */
+    public function hasAuthenticated()
+    {
+        return $this->user != null;
+    }
+
+    /**
+     * Checks if the config has been loaded from envs or passed in via parameters
+     * @return boolean
+     */
+    public function configLoaded()
+    {
+        $hasUsernameCred =  $this->username != '' &&
+            $this->password != '' &&
+            $this->host != '';
+
+        $hasPrivateKeyCred = $this->privateToken != '' &&
+            $this->host != '';
+
+        return $hasUsernameCred || $hasPrivateKeyCred;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-use App\Api\GitLab\GitLab;
+use App\Api\GitLab\GitLabManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,8 @@ $app->post('/hooks/catch', [
 ]);
 
 $app->get('test/auth', function () {
-    $auth = new GitLab();
-    $auth->authenticate();
-    dd($auth->getPrivateToken());
+    $gitlabs = new GitLabManager();
+    $gitlab = collect($gitlabs->getInstances())->last();
+    $gitlab->authenticate();
+    dd($gitlab);
 });
