@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommitTable extends Migration
+class CreateCommitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,15 @@ class CreateCommitTable extends Migration
      */
     public function up()
     {
-        Schema::create('commit', function (Blueprint $table) {
+        Schema::create('commits', function (Blueprint $table) {
             $table->increments('id');
             $table->string('commit_id');
-            $table->string('message');
+            $table->text('message');
             $table->string('timestamp');
             $table->string('author_name');
             $table->string('author_email');
+            $table->string('project_id')->nullable();
+            $table->string('url');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreateCommitTable extends Migration
      */
     public function down()
     {
-        Schema::drop('commit');
+        Schema::drop('commits');
     }
 }
