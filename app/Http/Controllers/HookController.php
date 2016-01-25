@@ -13,7 +13,8 @@ class HookController extends Controller
     /**
      * Handle incomming hooks.
      *
-     * @param int $id
+     * Incomming request object
+     * @param $request
      *
      * @return Response
      */
@@ -38,11 +39,16 @@ class HookController extends Controller
             $register = new HookRegister();
             $register->registerWithProjectId($projectId);
         }
+
         if (array_key_exists('object_kind', $data) && $data['object_kind'] == 'push') {
             $project = Project::where('project_id', $data['project_id'])->first();
             if ($project == null) {
                 // Removing https:// or http:// so the explode is easier to work with
-                $reducedUrl = str_replace(['http://', 'https://'], '', $data['repository']['homepage']);
+                $reducedUrl = str_replace(
+                  ['http://', 'https://'],
+                  '',
+                  $data['repository']['homepage']
+                );
                 $projectName = explode('/', $reducedUrl);
                 $namespace = $projectName[1];
                 $name = $projectName[2];
@@ -54,7 +60,6 @@ class HookController extends Controller
                 $project->group = $namespace;
                 $project->save();
             }
-
 
             foreach ($data['commits'] as $recievedCommit) {
                 $commit = new Commit();
