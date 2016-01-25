@@ -76,8 +76,8 @@ class GitLabManager
 
     /**
      * Send an Api request to all the instances
-     * @param string $method which api method to use
-     * @param string $path which api to send to
+     * @param string $method     which api method to use
+     * @param string $path       which api to send to
      * @param array  $formParams what form parameters to send
      * @return void
      */

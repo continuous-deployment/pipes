@@ -41,20 +41,23 @@ class GitLabRegistrar implements Registrar
 
     /**
      * Constructor
-     * @param Command $command
+     * @param Command $command command to run
      */
     public function __construct(Command $command)
     {
-        $this->command = $command;
+        $this->command       = $command;
         $this->gitlabManager = new GitLabManager();
     }
 
     /**
      * Registers a new GitLab instance
+     * @return void
      */
     public function register()
     {
-        $host = $this->command->ask('What is the url of your GitLab instance? (https://git.example.com)');
+        $host               = $this->command->ask(
+            'What is the url of your GitLab instance? (https://git.example.com)'
+        );
         $authenticationType = $this->command->choice(
             'How would you like to authenticate with your GitLab?',
             ['Username/email and password', 'Private token', 'Both'],
@@ -85,28 +88,37 @@ class GitLabRegistrar implements Registrar
 
     /**
      * Questsions used to get the private token
+     * @return void
      */
     protected function privateTokenQuestions()
     {
-        $privateToken = $this->command->ask('What is the private token of the user?');
+        $privateToken = $this->command->ask(
+            'What is the private token of the user?'
+        );
 
         $this->privateToken = $privateToken;
     }
 
     /**
      * Questions used for login
+     * @return void
      */
     protected function loginQuestions()
     {
-        $login = $this->command->ask('What is the username or email of the user?');
-        $password = $this->command->secret('What is the password of the user? (hidden)');
+        $login    = $this->command->ask(
+            'What is the username or email of the user?'
+        );
+        $password = $this->command->secret(
+            'What is the password of the user? (hidden)'
+        );
 
-        $this->login = $login;
+        $this->login    = $login;
         $this->password = $password;
     }
 
     /**
      * Called after the user has finished registering new services.
+     * @return void
      */
     public function afterRegistration()
     {
@@ -123,18 +135,18 @@ class GitLabRegistrar implements Registrar
 
     /**
      * Update the env string with any new values
-     * @param  string $envString
+     * @param  string $envString environment to update
      * @return string
      */
     public function updateEnv($envString)
     {
-        $envString = preg_replace('/GITLAB_.*\n\n?/', '', $envString);
-        $instances = $this->gitlabManager->getInstances();
-
-        for ($index = 0; $index < count($instances); $index++) {
-            $gitlab = $instances[$index];
+        $envString      = preg_replace('/GITLAB_.*\n\n?/', '', $envString);
+        $instances      = $this->gitlabManager->getInstances();
+        $totalInstances = count($instances);
+        for ($index = 0; $index < $totalInstances; $index++) {
+            $gitlab          = $instances[$index];
             $gitlabEnvString = $this->buildGitLabEnv($gitlab, $index);
-            $envString .= $gitlabEnvString;
+            $envString      .= $gitlabEnvString;
         }
 
         return $envString;
@@ -142,8 +154,8 @@ class GitLabRegistrar implements Registrar
 
     /**
      * Builds the env string from the GitLab instance
-     * @param  GitLab  $gitlab
-     * @param  integer $number
+     * @param  GitLab  $gitlab a gitlab instance
+     * @param  integer $number which gitlab instance
      * @return string
      */
     public function buildGitLabEnv(GitLab $gitlab, $number)
@@ -154,8 +166,8 @@ class GitLabRegistrar implements Registrar
             $number = '';
         }
 
-        $values = [];
-        $host = $gitlab->getHost();
+        $values   = [];
+        $host     = $gitlab->getHost();
         $username = $gitlab->getUsername();
         $password = $gitlab->getPassword();
 
@@ -165,9 +177,13 @@ class GitLabRegistrar implements Registrar
 
         if (!$gitlab->hasAuthenticated()) {
             $privateToken = $gitlab->getPrivateTokenProperty();
-            $values[] = 'GITLAB_AUTH_PRIVATE_TOKEN' . $number . '=' . $privateToken;
+            $values[]     = 'GITLAB_AUTH_PRIVATE_TOKEN' .
+                $number .
+                '=' .
+                $privateToken;
         }
 
-        return implode(PHP_EOL, $values) . PHP_EOL . PHP_EOL;
+        $envString = implode(PHP_EOL, $values) . PHP_EOL . PHP_EOL;
+        return $envString;
     }
 }

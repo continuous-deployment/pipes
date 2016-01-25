@@ -52,7 +52,7 @@ class Register extends Command
     /**
      * Ask the user what they would like to register with the application
      *
-     * @ return void
+     * @return void
      */
     public function whatWouldYouLikeToRegister()
     {
@@ -60,7 +60,9 @@ class Register extends Command
         $choices[] = 'No more';
 
         $registerType = $this->askWithCompletion(
-            'What would you like to register? (' . implode(', ', $choices->toArray()) . ')',
+            'What would you like to register? (' .
+                implode(', ', $choices->toArray()) .
+            ')',
             $choices->toArray(),
             $choices->first()
         );
@@ -69,6 +71,7 @@ class Register extends Command
             foreach ($this->registrars as $registrar) {
                 $registrar->afterRegistration();
             }
+
             $this->updateEnvFile();
 
             return;
@@ -85,10 +88,11 @@ class Register extends Command
 
     /**
      * Updates the env file.
+     * @return void
      */
     protected function updateEnvFile()
     {
-        $filename = '.env';
+        $filename  = '.env';
         $envString = file_get_contents($filename);
 
         foreach ($this->registrars as $registrar) {
