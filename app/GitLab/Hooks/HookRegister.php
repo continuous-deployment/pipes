@@ -3,7 +3,7 @@
 namespace App\GitLab\Hooks;
 
 use GuzzleHttp;
-use App\GitLab\Hooks\GitLabManager;
+use App\GitLab\GitLabManager;
 
 class HookRegister
 {
@@ -37,7 +37,7 @@ class HookRegister
             'projects/' . $projectId . '/hooks',
             [
                 'id'                    => $projectId,
-                'url'                   => env('PIPES_URL') . '/hooks/catch',
+                'url'                   => $this->getHookCatchUrl(),
                 'push_events'           => true,
                 'issues_events'         => true,
                 'merge_requests_events' => true,
@@ -57,8 +57,23 @@ class HookRegister
             'POST',
             'hooks',
             [
-                'url' => env('PIPES_URL') . '/hooks/catch'
+                'url' => $this->getHookCatchUrl(true)
             ]
         );
+    }
+
+    /**
+     * Gets the url for the hook catching
+     */
+    protected function getHookCatchUrl($fromCli = false)
+    {
+        $url = route('hook', ['appName' => 'gitlab']);
+
+        if ($fromCli) {
+            $path = str_replace(['http://:', 'https://:'], '', $url);
+            $url = env('PIPES_URL') . $path;
+        }
+
+        return $url;
     }
 }
