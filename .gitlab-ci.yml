@@ -16,7 +16,7 @@ lint_phpcs_job:
   image: registry.noprobe.co.uk/coding-standards
   stage: lint
   script:
-    - phpcs --standard=psr2 ./app -p --colors --ignore='*/*.blade.php'
+    - phpcs --standard=.testing/phpcs_ruleset.xml ./app -p --colors --ignore='*/*.blade.php'
   tags:
     - docker
 
