@@ -49,11 +49,11 @@ class GitLab
 
     /**
      * Creates a GitLab Auth instance
-     * @param string $number   Number to identify which Gitlab instance
-     * @param string $username Username to authenticate with GitLab
-     * @param string $password Password to authenticate with GitLab
+     * @param string $number       Number to identify which Gitlab instance
+     * @param string $username     Username to authenticate with GitLab
+     * @param string $password     Password to authenticate with GitLab
      * @param string $privateToken to authenticate with GitLab
-     * @param string $host     Host for the GitLab to authenticate with
+     * @param string $host         Host for the GitLab to authenticate with
      */
     public function __construct(
         $number = '',
@@ -75,7 +75,7 @@ class GitLab
         }
 
         if (empty($host)) {
-            $host     = env('GITLAB_URL' . $number);
+            $host = env('GITLAB_URL' . $number);
         }
 
         if (empty($privateToken)) {
@@ -120,13 +120,19 @@ class GitLab
      * @param  string $httpAction   HTTP action GET|POST|PUT..etc
      * @param  string $path         Path excluding the api/$version
      * @param  array  $formParams   Array of any form params to send.
-     * @param  string $privateToken Private token for auth. Pass in false for no token.
+     * Private token for auth. Pass in false for no token.
+     * @param  string $privateToken
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function sendApiRequest($httpAction, $path, $formParams = [], $privateToken = '')
+    public function sendApiRequest(
+        $httpAction,
+        $path,
+        $formParams = [],
+        $privateToken = ''
+    )
     {
-        $client   = new GuzzleHttp\Client();
-        $url = $this->host . '/' . $this->apiPath . $path;
+        $client = new GuzzleHttp\Client();
+        $url    = $this->host . '/' . $this->apiPath . $path;
 
         $options = [];
 
@@ -221,12 +227,12 @@ class GitLab
     }
 
     /**
-     * Checks if the config has been loaded from envs or passed in via parameters
+     * Checks if the config has been loaded from envs or passed in via params
      * @return boolean
      */
     public function configLoaded()
     {
-        $hasUsernameCred =  $this->username != '' &&
+        $hasUsernameCred = $this->username != '' &&
             $this->password != '' &&
             $this->host != '';
 
