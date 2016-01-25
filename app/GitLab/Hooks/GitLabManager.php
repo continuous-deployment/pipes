@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Hooks\GitLab;
+namespace App\GitLab\Hooks;
 
 use App\Hooks\GitLab\GitLab;
 

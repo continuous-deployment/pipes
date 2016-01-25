@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Hooks\GitLab;
+namespace App\GitLab\Hooks;
 
 use GuzzleHttp;
-use App\Hooks\GitLab\GitLabManager;
+use App\GitLab\Hooks\GitLabManager;
 
 class HookRegister
 {
