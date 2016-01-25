@@ -28,11 +28,11 @@ class Condition extends Model
     */
     public function failureConditions()
     {
-        $failureConditions $this->hasMany(
+        $failureConditions = $this->hasMany(
             'App\Models\Condition',
             'failure_condition_id',
             'id'
         );
-        return failureConditions;
+        return $failureConditions;
     }
 }
