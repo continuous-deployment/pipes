@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Registrars;
 
-use App\Api\GitLab\GitLab;
-use App\Api\GitLab\HookRegister;
-use App\Api\GitLab\GitLabManager;
+use App\Hooks\GitLab\GitLab;
+use App\Hooks\GitLab\HookRegister;
+use App\Hooks\GitLab\GitLabManager;
 use Illuminate\Console\Command;
 
 class GitLabRegistrar implements Registrar
