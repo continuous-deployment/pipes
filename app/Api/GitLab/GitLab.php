@@ -96,13 +96,11 @@ class GitLab
         // go grab the user object.
         if ($this->privateToken != '' && $this->user == '') {
             $response = $this->sendApiRequest('GET', 'user');
-        } else {
-            $response = $this->sendApiRequest('POST', 'session', [
-                'login'    => $this->username,
-                'password' => $this->password,
-            ], false);
         }
-
+        $response = $this->sendApiRequest('POST', 'session', [
+            'login'    => $this->username,
+            'password' => $this->password,
+        ], false);
 
         $this->user = json_decode($response->getBody()->getContents());
 
