@@ -17,11 +17,13 @@ $app->get('/', function () use ($app) {
 });
 
 // route for easier testing using query strings
-$app->get('/hooks/catch', [
-    'as' => 'hook', 'uses' => 'HookController@recieve'
+$app->get('/hooks/{appName}/catch', [
+    'as' => 'hook',
+    'uses' => 'HookController@recieve'
 ]);
-$app->post('/hooks/catch', [
-    'as' => 'hook', 'uses' => 'HookController@recieve'
+$app->post('/hooks/{appName}/catch', [
+    'as' => 'hook',
+    'uses' => 'HookController@recieve'
 ]);
 
 $app->get('test/auth', function () {
