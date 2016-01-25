@@ -15,8 +15,7 @@ class HookRegister
 
     /**
      * Constructor
-     * Accepts a GitLabManager instance
-     * @param GitLabManager $gitlab
+     * @param GitLabManager $gitlab accepts a GitLabManager instance.
      * @return void
      */
     public function __construct(GitLabManager $gitlab = null)
