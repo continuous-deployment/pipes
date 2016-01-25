@@ -30,3 +30,14 @@ $app->get('test/auth', function () {
     $gitlab->authenticate();
     dd($gitlab);
 });
+
+// projects
+$app->get('/projects', [
+  'as' => 'projects',
+  'uses' => 'ProjectController@all'
+  ]);
+
+$app->get('/projects/{project_id}', [
+  'as' => 'projects',
+  'uses' => 'ProjectController@get'
+  ]);
