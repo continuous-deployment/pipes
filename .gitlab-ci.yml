@@ -1,7 +1,32 @@
 stages:
+  - lint
   - build
   - test
   - deploy
+
+lint_phpmd_job:
+  image: registry.noprobe.co.uk/coding-standards
+  stage: lint
+  script:
+    - phpmd ./app text
+  tags:
+    - docker
+
+lint_phpcs_job:
+  image: registry.noprobe.co.uk/coding-standards
+  stage: lint
+  script:
+    - phpcs --standard=psr2 ./app -p --colors --ignore='*/*.blade.php'
+  tags:
+    - docker
+
+lint_semistandard_job:
+  image: registry.noprobe.co.uk/coding-standards
+  stage: lint
+  script:
+    - semistandard
+  tags:
+    - docker
 
 php_test_job:
   image: registry.noprobe.co.uk/nginx-phpfpm
