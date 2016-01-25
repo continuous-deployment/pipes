@@ -15,6 +15,7 @@ class HookRegister
 
     /**
      * Constructor
+     * Accepts a GitLabManager instance
      * @param GitLabManager $gitlab
      * @return void
      */
@@ -52,7 +53,7 @@ class HookRegister
 
     /**
      * Register system hooks on all the gitlab instances
-     * @retun void
+     * @return void
      */
     public function registerSystemHooksOnInstances()
     {
