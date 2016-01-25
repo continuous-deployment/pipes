@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\GitLab;
+namespace App\Hooks\GitLab;
 
-use App\Api\GitLab\GitLab;
+use App\Hooks\GitLab\GitLab;
 
 class GitLabManager
 {
