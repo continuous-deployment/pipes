@@ -8,7 +8,7 @@ lint_phpmd_job:
   image: registry.noprobe.co.uk/coding-standards
   stage: lint
   script:
-    - phpmd ./app text
+    - phpmd ./app text .testing/phpmd_ruleset.xml
   tags:
     - docker
 
