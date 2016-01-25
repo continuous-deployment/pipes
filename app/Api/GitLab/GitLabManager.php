@@ -66,8 +66,7 @@ class GitLabManager
 
     /**
      * Adds a GitLab instance to the array.
-     * Accepts a Gitlab instance
-     * @param GitLab $gitlab
+     * @param GitLab $gitlab accepts a gitlab instance
      * @return void
      */
     public function addInstance(GitLab $gitlab)
@@ -77,12 +76,9 @@ class GitLabManager
 
     /**
      * Send an Api request to all the instances
-     * Which API method to use
-     * @param string $method
-     * Which API path to send to
-     * @param string $path
-     * What form parameters to send
-     * @param array  $formParams
+     * @param string $method which api method to use
+     * @param string $path which api to send to
+     * @param array  $formParams what form parameters to send
      * @return void
      */
     public function sendApiRequestToInstances($method, $path, $formParams = [])
