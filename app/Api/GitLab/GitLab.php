@@ -120,8 +120,7 @@ class GitLab
      * @param  string $httpAction   HTTP action GET|POST|PUT..etc
      * @param  string $path         Path excluding the api/$version
      * @param  array  $formParams   Array of any form params to send.
-     * Private token for auth. Pass in false for no token.
-     * @param  string $privateToken
+     * @param  string $privateToken Pass in false for no auth token.
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function sendApiRequest(
@@ -129,8 +128,7 @@ class GitLab
         $path,
         $formParams = [],
         $privateToken = ''
-    )
-    {
+    ) {
         $client = new GuzzleHttp\Client();
         $url    = $this->host . '/' . $this->apiPath . $path;
 
