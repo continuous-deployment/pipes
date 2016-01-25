@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Api\GitLab\GitLabManager;
 use App\Console\Commands\Registrars\GitLabRegistrar;
 use Illuminate\Console\Command;
 
@@ -51,7 +50,7 @@ class Register extends Command
 
     public function whatWouldYouLikeToRegister()
     {
-        $choices = $this->registrars->keys();
+        $choices   = $this->registrars->keys();
         $choices[] = 'No more';
 
         $registerType = $this->askWithCompletion(
@@ -83,7 +82,7 @@ class Register extends Command
      */
     protected function updateEnvFile()
     {
-        $filename = '.env';
+        $filename  = '.env';
         $envString = file_get_contents($filename);
 
         foreach ($this->registrars as $registrar) {
