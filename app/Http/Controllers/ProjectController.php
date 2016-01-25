@@ -25,9 +25,9 @@ class ProjectController extends Controller
      *
      * @return Json Response
      */
-    public function get($project_id)
+    public function get($projectId)
     {
-        $project = Project::find($project_id);
+        $project = Project::find($projectId);
         return response()->json($project);
     }
 }

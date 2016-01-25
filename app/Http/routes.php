@@ -55,7 +55,7 @@ $app->get(
 );
 
 $app->get(
-    '/projects/{project_id}',
+    '/projects/{projectId}',
     [
     'as' => 'projects',
     'uses' => 'ProjectController@get'
