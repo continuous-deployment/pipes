@@ -49,8 +49,10 @@ class GitLab
 
     /**
      * Creates a GitLab Auth instance
+     * @param string $number   Number to identify which Gitlab instance
      * @param string $username Username to authenticate with GitLab
      * @param string $password Password to authenticate with GitLab
+     * @param string $privateToken to authenticate with GitLab
      * @param string $host     Host for the GitLab to authenticate with
      */
     public function __construct(
@@ -73,17 +75,17 @@ class GitLab
         }
 
         if (empty($host)) {
-            $host = env('GITLAB_URL' . $number);
+            $host     = env('GITLAB_URL' . $number);
         }
 
         if (empty($privateToken)) {
             $privateToken = env('GITLAB_AUTH_PRIVATE_TOKEN' . $number);
         }
 
-        $this->username = $username;
-        $this->password = $password;
+        $this->username     = $username;
+        $this->password     = $password;
         $this->privateToken = $privateToken;
-        $this->host = $host;
+        $this->host         = $host;
     }
 
     /**
@@ -97,10 +99,16 @@ class GitLab
         if ($this->privateToken != '' && $this->user == '') {
             $response = $this->sendApiRequest('GET', 'user');
         }
-        $response = $this->sendApiRequest('POST', 'session', [
-            'login'    => $this->username,
-            'password' => $this->password,
-        ], false);
+
+        $response = $this->sendApiRequest(
+            'POST',
+            'session',
+            [
+                'login'    => $this->username,
+                'password' => $this->password,
+            ],
+            false
+        );
 
         $this->user = json_decode($response->getBody()->getContents());
 
