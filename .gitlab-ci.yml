@@ -20,14 +20,6 @@ lint_phpcs_job:
   tags:
     - docker
 
-lint_semistandard_job:
-  image: registry.noprobe.co.uk/coding-standards
-  stage: lint
-  script:
-    - semistandard
-  tags:
-    - docker
-
 php_test_job:
   image: registry.noprobe.co.uk/nginx-phpfpm
   stage: test
