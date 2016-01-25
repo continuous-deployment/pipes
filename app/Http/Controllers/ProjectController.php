@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\Project;
+use Illuminate\Http\Response;
 
 class ProjectController extends Controller
 {
@@ -17,6 +15,7 @@ class ProjectController extends Controller
     public function all()
     {
         $projects = Project::all();
+
         return response()->json($projects);
     }
 
@@ -24,11 +23,12 @@ class ProjectController extends Controller
      * Get a project by its ID
      *
      * @param  integer $projectId Project id to get
-     * @return Json Response
+     * @return Json    Response
      */
     public function get($projectId)
     {
         $project = Project::find($projectId);
+
         return response()->json($project);
     }
 }
