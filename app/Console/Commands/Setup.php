@@ -33,7 +33,10 @@ class Setup extends Command
      */
     public function handle()
     {
-        $refresh = $this->confirm('Would you like to refresh the database?', false);
+        $refresh = $this->confirm(
+            'Would you like to refresh the database?',
+            false
+        );
         if ($refresh) {
             $this->call('migrate:refresh');
         } else {

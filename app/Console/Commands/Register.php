@@ -49,9 +49,14 @@ class Register extends Command
         $this->whatWouldYouLikeToRegister();
     }
 
+    /**
+     * Ask the user what they would like to register with the application
+     *
+     * @ return void
+     */
     public function whatWouldYouLikeToRegister()
     {
-        $choices = $this->registrars->keys();
+        $choices   = $this->registrars->keys();
         $choices[] = 'No more';
 
         $registerType = $this->askWithCompletion(

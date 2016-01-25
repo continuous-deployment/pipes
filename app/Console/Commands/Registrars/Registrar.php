@@ -14,18 +14,20 @@ interface Registrar
 
     /**
      * Registers a new instance
+     * @return void
      */
     public function register();
 
     /**
      * Update the env string with any new values
-     * @param  string $envString
+     * @param  string $envString environment string to update
      * @return string
      */
     public function updateEnv($envString);
 
     /**
      * Called after the user has finished registering new services.
+     * @return void
      */
     public function afterRegistration();
 }
