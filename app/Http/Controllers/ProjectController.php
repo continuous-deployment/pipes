@@ -23,6 +23,7 @@ class ProjectController extends Controller
     /**
      * Get a project by its ID
      *
+     * @param  integer $projectId Project id to get
      * @return Json Response
      */
     public function get($projectId)
