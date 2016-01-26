@@ -28,6 +28,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // TODO: add a default schedule to adding actions to a queue
-        dd($schedule);
+        return $schedule;
     }
 }
