@@ -13,7 +13,12 @@ class Condition extends Model
      */
     public function successConditions()
     {
-        return $this->hasMany('App\Models\Condition', 'success_condition_id', 'id');
+        $successConditions = $this->hasMany(
+            'App\Models\Condition',
+            'success_condition_id',
+            'id'
+        );
+        return $successConditions;
     }
 
     /**
@@ -23,6 +28,11 @@ class Condition extends Model
     */
     public function failureConditions()
     {
-        return $this->hasMany('App\Models\Condition', 'failure_condition_id', 'id');
+        $failureConditions = $this->hasMany(
+            'App\Models\Condition',
+            'failure_condition_id',
+            'id'
+        );
+        return $failureConditions;
     }
 }

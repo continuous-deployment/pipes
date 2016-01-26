@@ -22,11 +22,12 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule schedule object
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        // TODO: add a default schedule to adding actions to a queue
+        return $schedule;
     }
 }
