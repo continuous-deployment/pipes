@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request Request that failed
+     * @param  \Illuminate\Http\Request $request   Request that failed
      * @param  \Exception               $exception The exception that was thrown
      * @return \Illuminate\Http\Response
      */
