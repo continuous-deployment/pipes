@@ -2,54 +2,50 @@
 
 namespace App\Pipeline;
 
-use Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
+use Illuminate\Database\Eloquent\Model;
 
-class Pipeline implements PipelineContract
+class Pipeline
 {
+    /**
+     * Object that will get passed to each pipe
+     *
+     * @var \App\Pipeline\Traveler
+     */
+    protected $traveler;
+
     /**
      * Set the traveler object being sent on the pipeline.
      *
-     * @param  mixed  $traveler
+     * @param  Traveler $traveler Traveler to be passed to the pipes
      * @return $this
      */
-    public function send($traveler)
+    public function send(Traveler $traveler)
     {
+        $this->traveler = $traveler;
 
         return $this;
     }
 
     /**
-     * Set the stops of the pipeline.
+     * Starts the pipeline with pipe given
      *
-     * @param  dynamic|array  $stops
-     * @return $this
+     * @param  Pipe  $initialPipe Initial Pipe object to process
+     * @return void
      */
-    public function through($stops)
+    public function startWith(Pipe $initialPipe)
     {
-
-        return $this;
+        $initialPipe->flowThrough($this->traveler);
     }
 
     /**
-     * Set the method to call on the stops.
+     * Starts the pipeline with a model
      *
-     * @param  string  $method
-     * @return $this
+     * @param  Model $model Model that will be used to get the correct pipe
+     * @return void
      */
-    public function via($method)
+    public function startWithModel(Model $model)
     {
-
-        return $this;
-    }
-
-    /**
-     * Run the pipeline with a final destination callback.
-     *
-     * @param  \Closure  $destination
-     * @return mixed
-     */
-    public function then(Closure $destination)
-    {
-        return $destination();
+        $initialPipe = PipeFactory::make($model);
+        $this->startWith($initialPipe);
     }
 }
