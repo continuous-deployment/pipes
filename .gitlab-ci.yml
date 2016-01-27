@@ -28,6 +28,7 @@ php_test_job:
     - cp .env.testing .env
     - touch database/database.sqlite
     - php artisan migrate
+    - vendor/bin/phpunit
   tags:
     - docker
 
