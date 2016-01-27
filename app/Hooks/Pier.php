@@ -31,6 +31,7 @@ class Pier
      * Sees if there's a suitable catcher for the given request
      *
      * @param Request $request Request hook
+     * @param string  $appName The name of the application that sent the hook
      *
      * @return mixed
      */
