@@ -1,5 +1,9 @@
 <?php
 use App\Api\GitLab\GitLabManager;
+use App\Models\Condition;
+use App\Pipeline\Traveler;
+use App\Pipeline\Pipeline;
+use App\Pipeline\PipeFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,16 @@ use App\Api\GitLab\GitLabManager;
 */
 
 $app->get('/', function () use ($app) {
+    /** @var \App\Models\Condition $condition */
+    $condition = Condition::find(1);
+    $traveler = new Traveler();
+    $pipeline = new Pipeline();
+
+    $pipeline
+        ->send($traveler)
+        ->startWithModel($condition);
+
+
     return $app->welcome();
 });
 
