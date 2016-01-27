@@ -24,7 +24,7 @@ interface Catcher
     /**
      * A check to see if this catcher wants the received hook
      *
-     * @param  Request $request
+     * @param  Request $request The request object that was sent
      * @return boolean
      */
     public function wantsHook(Request $request);

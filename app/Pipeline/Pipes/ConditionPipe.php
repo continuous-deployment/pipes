@@ -19,7 +19,7 @@ class ConditionPipe implements Pipe
     /**
      * Constructor
      *
-     * @param Condition $parameter Condition to use when pipe gets called
+     * @param Condition $condition Condition to use when pipe gets called
      */
     public function __construct(Condition $condition)
     {
@@ -59,26 +59,72 @@ class ConditionPipe implements Pipe
     protected function runCondition(Traveler $traveler)
     {
         $fieldValue = $traveler->lookAt($this->condition->field);
+        $operator   = $this->condition->operator;
 
-        switch ($this->condition->operator) {
-            case '==':
-                return $fieldValue == $this->condition->value;
-            case '===':
-                return $fieldValue === $this->condition->value;
-            case '!=':
-                return $fieldValue != $this->condition->value;
-            case '!==':
-                return $fieldValue !== $this->condition->value;
-            case '>':
-                return $fieldValue > $this->condition->value;
-            case '>=':
-                return $fieldValue >= $this->condition->value;
-            case '<':
-                return $fieldValue < $this->condition->value;
-            case '<=':
-                return $fieldValue <= $this->condition->value;
-            default:
-                return false;
+        if ($this->checkEqualsAndNotEquals($operator, $fieldValue)) {
+            return true;
+        }
+
+        if ($this->checkGreaterAndLessThan($operator, $fieldValue)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks the ==, ===, !=, !== operators
+     *
+     * @param string $operator   Operator to check
+     * @param mixed  $fieldValue Value to check against
+     *
+     * @return boolean
+     */
+    protected function checkEqualsAndNotEquals($operator, $fieldValue)
+    {
+        if ($operator === '==') {
+            return $fieldValue == $this->condition->value;
+        }
+
+        if ($operator === '===') {
+            return $fieldValue === $this->condition->value;
+        }
+
+        if ($operator === '!=') {
+            return $fieldValue != $this->condition->value;
+        }
+
+        if ($operator === '!==') {
+            return $fieldValue !== $this->condition->value;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks the >, >=, <, <= operators
+     *
+     * @param string $operator   Operator to check
+     * @param mixed  $fieldValue Value to check against
+     *
+     * @return boolean
+     */
+    protected function checkGreaterAndLessThan($operator, $fieldValue)
+    {
+        if ($operator === '>') {
+            return $fieldValue > $this->condition->value;
+        }
+
+        if ($operator === '>=') {
+            return $fieldValue >= $this->condition->value;
+        }
+
+        if ($operator === '<') {
+            return $fieldValue < $this->condition->value;
+        }
+
+        if ($operator === '<=') {
+            return $fieldValue <= $this->condition->value;
         }
     }
 }

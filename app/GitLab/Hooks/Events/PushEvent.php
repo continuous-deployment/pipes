@@ -52,7 +52,8 @@ class PushEvent extends GitLabEvent implements Event
     /**
      * Removes http protocols from the start of the url
      *
-     * @param string $url Url to remove protocol from
+     * @param  string $url Url to remove protocol from
+     * @return string
      */
     protected function removeProtocol($url)
     {

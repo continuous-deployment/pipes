@@ -19,7 +19,7 @@ class SplitterPipe implements Pipe
     /**
      * Constructor
      *
-     * @param Splitter $parameter Splitter to use when pipe gets called
+     * @param Splitter $splitter Splitter to use when pipe gets called
      */
     public function __construct(Splitter $splitter)
     {

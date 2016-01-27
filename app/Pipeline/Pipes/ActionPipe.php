@@ -19,7 +19,7 @@ class ActionPipe implements Pipe
     /**
      * Constructor
      *
-     * @param Action $parameter Action to use when pipe gets called
+     * @param Action $action Action to use when pipe gets called
      */
     public function __construct(Action $action)
     {
@@ -39,10 +39,11 @@ class ActionPipe implements Pipe
         if ($result) {
             \Log::info('SUCCESSLY PROCESSED ACTION');
         } else {
+            \Log::info('UNSUCCESSLY PROCESSED ACTION');
         }
 
         $pipeable = $this->action->pipeable;
-        $pipe = PipeFactory::make($pipeable);
+        $pipe     = PipeFactory::make($pipeable);
         if ($pipe === null) {
             return;
         }
@@ -60,6 +61,7 @@ class ActionPipe implements Pipe
     {
         // TODO: Do actual processing.
         \Log::info('PROCESSING ACTION: ' . $this->action->action);
+
         return true && $traveler;
     }
 }

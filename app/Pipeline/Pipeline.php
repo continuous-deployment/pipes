@@ -29,7 +29,7 @@ class Pipeline
     /**
      * Starts the pipeline with pipe given
      *
-     * @param  Pipe  $initialPipe Initial Pipe object to process
+     * @param  Pipe $initialPipe Initial Pipe object to process
      * @return void
      */
     public function startWith(Pipe $initialPipe)

@@ -25,7 +25,7 @@ class Traveler
     {
         $array = $this->items;
 
-        if (is_null($key)) {
+        if ($key == null) {
             return null;
         }
 
