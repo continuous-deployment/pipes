@@ -62,7 +62,6 @@ class ConditionPipe implements Pipe
 
         switch ($this->condition->operator) {
             case '==':
-            default:
                 return $fieldValue == $this->condition->value;
             case '===':
                 return $fieldValue === $this->condition->value;
@@ -78,8 +77,8 @@ class ConditionPipe implements Pipe
                 return $fieldValue < $this->condition->value;
             case '<=':
                 return $fieldValue <= $this->condition->value;
-            case '<>':
-                return $fieldValue <> $this->condition->value;
+            default:
+                return false;
         }
     }
 }
