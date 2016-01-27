@@ -9,9 +9,7 @@ class HookController extends Controller
 {
     /**
      * Handle incomming hooks.
-     *
-     * @param int $id
-     *
+     * @param  Request  $request Incomming request object
      * @return Response
      */
     public function recieve(Request $request, $appName)

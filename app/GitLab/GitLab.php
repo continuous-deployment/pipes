@@ -49,9 +49,11 @@ class GitLab
 
     /**
      * Creates a GitLab Auth instance
-     * @param string $username Username to authenticate with GitLab
-     * @param string $password Password to authenticate with GitLab
-     * @param string $host     Host for the GitLab to authenticate with
+     * @param string $number       Number to identify which Gitlab instance
+     * @param string $username     Username to authenticate with GitLab
+     * @param string $password     Password to authenticate with GitLab
+     * @param string $privateToken to authenticate with GitLab
+     * @param string $host         Host for the GitLab to authenticate with
      */
     public function __construct(
         $number = '',
@@ -80,10 +82,10 @@ class GitLab
             $privateToken = env('GITLAB_AUTH_PRIVATE_TOKEN' . $number);
         }
 
-        $this->username = $username;
-        $this->password = $password;
+        $this->username     = $username;
+        $this->password     = $password;
         $this->privateToken = $privateToken;
-        $this->host = $host;
+        $this->host         = $host;
     }
 
     /**
@@ -96,13 +98,17 @@ class GitLab
         // go grab the user object.
         if ($this->privateToken != '' && $this->user == '') {
             $response = $this->sendApiRequest('GET', 'user');
-        } else {
-            $response = $this->sendApiRequest('POST', 'session', [
-                'login'    => $this->username,
-                'password' => $this->password,
-            ], false);
         }
 
+        $response = $this->sendApiRequest(
+            'POST',
+            'session',
+            [
+                'login'    => $this->username,
+                'password' => $this->password,
+            ],
+            false
+        );
 
         $this->user = json_decode($response->getBody()->getContents());
 
@@ -114,13 +120,17 @@ class GitLab
      * @param  string $httpAction   HTTP action GET|POST|PUT..etc
      * @param  string $path         Path excluding the api/$version
      * @param  array  $formParams   Array of any form params to send.
-     * @param  string $privateToken Private token for auth. Pass in false for no token.
+     * @param  string $privateToken Pass in false for no auth token.
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function sendApiRequest($httpAction, $path, $formParams = [], $privateToken = '')
-    {
-        $client   = new GuzzleHttp\Client();
-        $url = $this->host . '/' . $this->apiPath . $path;
+    public function sendApiRequest(
+        $httpAction,
+        $path,
+        $formParams = [],
+        $privateToken = ''
+    ) {
+        $client = new GuzzleHttp\Client();
+        $url    = $this->host . '/' . $this->apiPath . $path;
 
         $options = [];
 
@@ -215,12 +225,12 @@ class GitLab
     }
 
     /**
-     * Checks if the config has been loaded from envs or passed in via parameters
+     * Checks if the config has been loaded from envs or passed in via params
      * @return boolean
      */
     public function configLoaded()
     {
-        $hasUsernameCred =  $this->username != '' &&
+        $hasUsernameCred = $this->username != '' &&
             $this->password != '' &&
             $this->host != '';
 

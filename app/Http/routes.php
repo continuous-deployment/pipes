@@ -40,9 +40,29 @@ $app->post('/hooks/{appName}/catch', [
     'uses' => 'HookController@recieve'
 ]);
 
-$app->get('test/auth', function () {
-    $gitlabs = new GitLabManager();
-    $gitlab = collect($gitlabs->getInstances())->last();
-    $gitlab->authenticate();
-    dd($gitlab);
-});
+$app->get(
+    'test/auth',
+    function () {
+        $gitlabs = new GitLabManager();
+        $gitlab  = collect($gitlabs->getInstances())->last();
+        $gitlab->authenticate();
+        dd($gitlab);
+    }
+);
+
+// projects
+$app->get(
+    '/projects',
+    [
+    'as' => 'projects',
+    'uses' => 'ProjectController@all'
+    ]
+);
+
+$app->get(
+    '/projects/{projectId}',
+    [
+    'as' => 'projects',
+    'uses' => 'ProjectController@get'
+    ]
+);

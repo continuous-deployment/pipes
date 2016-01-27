@@ -22,6 +22,7 @@ class GitLabManager
 
     /**
      * Clears an instances on this manager
+     * @return void
      */
     public function clearInstances()
     {
@@ -30,6 +31,7 @@ class GitLabManager
 
     /**
      * Gets all GitLab instances from the env file.
+     * @return void
      */
     public function getInstancesFromEnv()
     {
@@ -64,7 +66,8 @@ class GitLabManager
 
     /**
      * Adds a GitLab instance to the array.
-     * @param GitLab $gitlab
+     * @param GitLab $gitlab accepts a gitlab instance
+     * @return void
      */
     public function addInstance(GitLab $gitlab)
     {
@@ -73,9 +76,10 @@ class GitLabManager
 
     /**
      * Send an Api request to all the instances
-     * @param string $method
-     * @param string $path
-     * @param array  $formParams
+     * @param string $method     which api method to use
+     * @param string $path       which api to send to
+     * @param array  $formParams what form parameters to send
+     * @return void
      */
     public function sendApiRequestToInstances($method, $path, $formParams = [])
     {
