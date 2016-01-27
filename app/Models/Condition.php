@@ -12,8 +12,8 @@ class Condition extends Model
      * @var array
      */
     protected $with = [
-        'success_pipeable',
-        'failure_pipeable'
+        'successPipeable',
+        'failurePipeable'
     ];
 
     /**
@@ -21,7 +21,7 @@ class Condition extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function success_pipeable()
+    public function successPipeable()
     {
         return $this->morphTo('success_pipeable', null, 'success_pipeable_id');
     }
@@ -31,8 +31,8 @@ class Condition extends Model
     *
     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
     */
-    public function failure_pipeable()
+    public function failurePipeable()
     {
-        return $this->morphTo('failure_pipeable');
+        return $this->morphTo('failure_pipeable', null, 'failure_pipeable_id');
     }
 }
