@@ -1,5 +1,9 @@
 <?php
 use App\Api\GitLab\GitLabManager;
+use App\Models\Condition;
+use App\Pipeline\Traveler;
+use App\Pipeline\Pipeline;
+use App\Pipeline\PipeFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,23 +19,32 @@ use App\Api\GitLab\GitLabManager;
 $app->get(
     '/',
     function () use ($app) {
+        /** @var \App\Models\Condition $condition */
+        $condition = Condition::find(1);
+        $traveler = new Traveler();
+        $pipeline = new Pipeline();
+
+        $pipeline
+            ->send($traveler)
+            ->startWithModel($condition);
+
         return $app->welcome();
     }
 );
 
 // route for easier testing using query strings
 $app->get(
-    '/hooks/catch',
+    '/hooks/{appName}/catch',
     [
-    'as' => 'hook',
-    'uses' => 'HookController@recieve'
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
     ]
 );
 $app->post(
-    '/hooks/catch',
+    '/hooks/{appName}/catch',
     [
-    'as' => 'hook',
-    'uses' => 'HookController@recieve'
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
     ]
 );
 
@@ -49,15 +62,15 @@ $app->get(
 $app->get(
     '/projects',
     [
-    'as' => 'projects',
-    'uses' => 'ProjectController@all'
+        'as' => 'projects',
+        'uses' => 'ProjectController@all'
     ]
 );
 
 $app->get(
     '/projects/{projectId}',
     [
-    'as' => 'projects',
-    'uses' => 'ProjectController@get'
+        'as' => 'projects',
+        'uses' => 'ProjectController@get'
     ]
 );

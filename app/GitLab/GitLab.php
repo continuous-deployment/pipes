@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\GitLab;
+namespace App\GitLab;
 
 use GuzzleHttp;
 

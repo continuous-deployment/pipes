@@ -7,32 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 class Condition extends Model
 {
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'successPipeable',
+        'failurePipeable'
+    ];
+
+    /**
      * All the conditions that will run if this condition passes
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function successConditions()
+    public function successPipeable()
     {
-        $successConditions = $this->hasMany(
-            'App\Models\Condition',
-            'success_condition_id',
-            'id'
-        );
-        return $successConditions;
+        return $this->morphTo('success_pipeable', null, 'success_pipeable_id');
     }
 
     /**
     * All the conditions that will run if this condition fails
     *
-    * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    * @return \Illuminate\Database\Eloquent\Relations\MorphTo
     */
-    public function failureConditions()
+    public function failurePipeable()
     {
-        $failureConditions = $this->hasMany(
-            'App\Models\Condition',
-            'failure_condition_id',
-            'id'
-        );
-        return $failureConditions;
+        return $this->morphTo('failure_pipeable', null, 'failure_pipeable_id');
     }
 }

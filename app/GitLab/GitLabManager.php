@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\GitLab;
+namespace App\GitLab;
 
-use App\Api\GitLab\GitLab;
+use App\GitLab\GitLab;
 
 class GitLabManager
 {

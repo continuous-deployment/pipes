@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Api\GitLab\GitLabManager;
 use App\Console\Commands\Registrars\GitLabRegistrar;
 use Illuminate\Console\Command;
 
