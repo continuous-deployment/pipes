@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Split;
 use App\Models\Action;
-use App\Models\Splitter;
 use App\Models\Condition;
+use App\Models\Split;
+use App\Models\Splitter;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 class ExamplePipelineSeeder extends Seeder
 {
@@ -16,12 +15,14 @@ class ExamplePipelineSeeder extends Seeder
      */
     public function run()
     {
-        $firstCondition = new Condition([
-            'type' => 'if',
-            'field' => '',
-            'operator' => '==',
-            'value' => ''
-        ]);
+        $firstCondition = new Condition(
+            [
+                'type'     => 'if',
+                'field'    => '',
+                'operator' => '==',
+                'value'    => '',
+            ]
+        );
         $firstCondition->save();
 
         $splitter = new Splitter();
@@ -31,25 +32,31 @@ class ExamplePipelineSeeder extends Seeder
         $secondSplit = new Split();
         $secondSplit->save();
 
-        $secondCondition = new Condition([
-            'type' => 'contains',
-            'field' => '',
-            'operator' => '==',
-            'value' => ''
-        ]);
+        $secondCondition = new Condition(
+            [
+                'type'     => 'contains',
+                'field'    => '',
+                'operator' => '==',
+                'value'    => '',
+            ]
+        );
         $secondCondition->save();
 
-        $firstAction = new Action([
-            'action' => 'npm install'
-        ]);
+        $firstAction = new Action(
+            [
+                'action' => 'npm install',
+            ]
+        );
         $firstAction->save();
 
-        $secondAction = new Action([
-            'action' => 'composer install'
-        ]);
+        $secondAction = new Action(
+            [
+                'action' => 'composer install',
+            ]
+        );
         $secondAction->save();
 
-        $secondCondition->success_pipeable()->associate($secondAction)->save();
+        $secondCondition->successPipeable()->associate($secondAction)->save();
         $firstSplit->pipeable()->associate($secondCondition);
 
         $secondSplit->pipeable()->associate($firstAction);
@@ -57,6 +64,6 @@ class ExamplePipelineSeeder extends Seeder
         $splitter->splits()->save($firstSplit);
         $splitter->splits()->save($secondSplit);
 
-        $firstCondition->success_pipeable()->associate($splitter)->save();
+        $firstCondition->successPipeable()->associate($splitter)->save();
     }
 }
