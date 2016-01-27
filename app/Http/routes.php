@@ -16,29 +16,37 @@ use App\Pipeline\PipeFactory;
 |
 */
 
-$app->get('/', function () use ($app) {
-    /** @var \App\Models\Condition $condition */
-    $condition = Condition::find(1);
-    $traveler = new Traveler();
-    $pipeline = new Pipeline();
+$app->get(
+    '/',
+    function () use ($app) {
+        /** @var \App\Models\Condition $condition */
+        $condition = Condition::find(1);
+        $traveler = new Traveler();
+        $pipeline = new Pipeline();
 
-    $pipeline
-        ->send($traveler)
-        ->startWithModel($condition);
+        $pipeline
+            ->send($traveler)
+            ->startWithModel($condition);
 
-
-    return $app->welcome();
-});
+        return $app->welcome();
+    }
+);
 
 // route for easier testing using query strings
-$app->get('/hooks/{appName}/catch', [
-    'as' => 'hook',
-    'uses' => 'HookController@recieve'
-]);
-$app->post('/hooks/{appName}/catch', [
-    'as' => 'hook',
-    'uses' => 'HookController@recieve'
-]);
+$app->get(
+    '/hooks/{appName}/catch',
+    [
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
+    ]
+);
+$app->post(
+    '/hooks/{appName}/catch',
+    [
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
+    ]
+);
 
 $app->get(
     'test/auth',
@@ -54,15 +62,15 @@ $app->get(
 $app->get(
     '/projects',
     [
-    'as' => 'projects',
-    'uses' => 'ProjectController@all'
+        'as' => 'projects',
+        'uses' => 'ProjectController@all'
     ]
 );
 
 $app->get(
     '/projects/{projectId}',
     [
-    'as' => 'projects',
-    'uses' => 'ProjectController@get'
+        'as' => 'projects',
+        'uses' => 'ProjectController@get'
     ]
 );
