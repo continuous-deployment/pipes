@@ -5,10 +5,10 @@ namespace App\Pipeline;
 interface Pipe
 {
     /**
-     * Handles the incoming request
+     * Handles the incoming traveler and perform necessary action
      *
-     * @param  mixed $traveler The data sent from the previous pipe.
-     * @return mixed
+     * @param  Traveler $traveler The data sent from the previous pipe.
+     * @return void
      */
-    public function handle($data);
+    public function flowThrough(Traveler $traveler);
 }
