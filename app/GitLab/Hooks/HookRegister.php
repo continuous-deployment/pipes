@@ -2,7 +2,6 @@
 
 namespace App\GitLab\Hooks;
 
-use GuzzleHttp;
 use App\GitLab\GitLabManager;
 
 class HookRegister
@@ -15,7 +14,7 @@ class HookRegister
 
     /**
      * Constructor
-     * @param GitLabManager $gitlab accepts a GitLabManager instance.
+     * @param  GitLabManager $gitlab accepts a GitLabManager instance.
      * @return void
      */
     public function __construct(GitLabManager $gitlab = null)
@@ -45,7 +44,7 @@ class HookRegister
                 'merge_requests_events' => true,
                 'tag_push_events'       => true,
                 'note_events'           => true,
-                'build_events'          => true
+                'build_events'          => true,
             ]
         );
     }
@@ -60,22 +59,33 @@ class HookRegister
             'POST',
             'hooks',
             [
-                'url' => $this->getHookCatchUrl(true)
+                'url' => $this->getHookCatchUrlFromCli(),
             ]
         );
     }
 
     /**
      * Gets the url for the hook catching
+     *
+     * @return string
      */
-    protected function getHookCatchUrl($fromCli = false)
+    protected function getHookCatchUrl()
     {
         $url = route('hook', ['appName' => 'gitlab']);
 
-        if ($fromCli) {
-            $path = str_replace(['http://:', 'https://:'], '', $url);
-            $url = env('PIPES_URL') . $path;
-        }
+        return $url;
+    }
+
+    /**
+     * Get the hook catch url when access from cli
+     *
+     * @return string
+     */
+    protected function getHookCatchUrlFromCli()
+    {
+        $url  = $this->getHookCatchUrl();
+        $path = str_replace(['http://:', 'https://:'], '', $url);
+        $url  = env('PIPES_URL') . $path;
 
         return $url;
     }
