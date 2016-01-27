@@ -60,6 +60,6 @@ class ActionPipe implements Pipe
     {
         // TODO: Do actual processing.
         \Log::info('PROCESSING ACTION: ' . $this->action->action);
-        return true;
+        return true && $traveler;
     }
 }
