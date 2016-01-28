@@ -30,17 +30,24 @@ class ProjectCreateEvent extends GitLabEvent implements Event
 
         // store new project in database
         $projectName = explode('/', $data['path_with_namespace']);
-        $namespace = $projectName[0];
-        $name = $projectName[1];
-        $projectId = $data['project_id'];
+        $namespace   = $projectName[0];
+        $name        = $projectName[1];
+        $projectId   = $data['project_id'];
 
-        $project = new Project();
+        $project             = new Project();
         $project->project_id = $projectId;
-        $project->name = $name;
-        $project->group = $namespace;
+        $project->name       = $name;
+        $project->group      = $namespace;
         $project->save();
 
         $register = new HookRegister();
         $register->registerWithProjectId($projectId);
+
+        return [
+            'project' => $project,
+            'event'   => [
+                'type' => 'project_create',
+            ],
+        ];
     }
 }
