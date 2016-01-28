@@ -46,7 +46,15 @@ class PushEvent extends GitLabEvent implements Event
             $project->save();
         }
 
-        $this->processCommits($data['commits'], $project);
+        $commits = $this->processCommits($data['commits'], $project);
+
+        return [
+            'project' => $project,
+            'commits' => $commits,
+            'event'   => [
+                'type' => 'push'
+            ]
+        ];
     }
 
     /**
@@ -75,6 +83,8 @@ class PushEvent extends GitLabEvent implements Event
      */
     protected function processCommits($commits, $project)
     {
+        $commitModels = [];
+
         foreach ($commits as $recievedCommit) {
             $commit               = new Commit();
             $commit->commit_id    = $recievedCommit['id'];
@@ -85,6 +95,9 @@ class PushEvent extends GitLabEvent implements Event
             $commit->author_email = $recievedCommit['author']['email'];
             $commit->project_id   = $project->project_id;
             $commit->save();
+            $commitModels[] = $commit;
         }
+
+        return $commitModels;
     }
 }

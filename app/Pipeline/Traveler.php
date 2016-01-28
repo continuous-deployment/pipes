@@ -56,10 +56,22 @@ class Traveler
     public function give($value, $key = null)
     {
         if ($key === null) {
-            $class = new ReflectionClass($value);
-            $key   = snake_case($class->getShortName());
+            if ($value === null) {
+                return;
+            }
+
+            if (!is_array($value)) {
+                $class = new ReflectionClass($value);
+                $key   = snake_case($class->getShortName());
+            } else {
+                foreach ($value as $key => $item) {
+                    Arr::set($this->items, $key, $item);
+                }
+
+                return;
+            }
         }
 
-        $this->items = Arr::add($this->items, strtolower($key), $value);
+        $this->items = Arr::set($this->items, strtolower($key), $value);
     }
 }
