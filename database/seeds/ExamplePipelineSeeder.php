@@ -18,9 +18,9 @@ class ExamplePipelineSeeder extends Seeder
         $firstCondition = new Condition(
             [
                 'type'     => 'if',
-                'field'    => '',
+                'field'    => 'event.type',
                 'operator' => '==',
-                'value'    => '',
+                'value'    => 'push',
             ]
         );
         $firstCondition->save();
