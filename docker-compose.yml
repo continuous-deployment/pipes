@@ -16,7 +16,9 @@ mysql:
     - .docker/db/data:/var/lib/mysql
 
 runner:
-  image: registry.noprobe.co.uk/pipes-runner
+  image: registry.noprobe.co.uk/nginx-phpfpm
+  command:
+    - php artisan queue:listen
   volumes_from:
     - php
   links:
