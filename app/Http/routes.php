@@ -1,5 +1,6 @@
 <?php
 use App\Api\GitLab\GitLabManager;
+use App\Models\Host;
 use App\Models\Condition;
 use App\Pipeline\Traveler;
 use App\Pipeline\Pipeline;
@@ -27,6 +28,9 @@ $app->get(
         $pipeline
             ->send($traveler)
             ->startWithModel($condition);
+
+        $host = Host::find(1);
+        dd($host);
 
         return $app->welcome();
     }
