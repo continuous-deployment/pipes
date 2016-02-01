@@ -14,7 +14,6 @@ class Host extends Model
     protected $fillable = [
         'host',
         'port',
-        'hostname',
     ];
 
     /**
