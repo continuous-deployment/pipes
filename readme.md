@@ -1,5 +1,7 @@
 # Pipes #
 
+![travis build badge](https://travis-ci.org/datkinson/pipes.svg?branch=master)
+
 ### Installation via docker ###
 
 Docker Compose is set up for this repository
