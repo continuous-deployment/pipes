@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsTable extends Migration
+class CreateSplitterPipeablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,11 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('splitter_pipeables', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('project_id');
-            $table->string('name');
-            $table->string('group');
-            $table->string('url')->nullable();
+            $table->integer('splitter_id')->unsigned();
+            $table->integer('pipeable_id')->unsigned()->nullable();
+            $table->string('pipeable_type')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('projects');
+        Schema::drop('splitter_pipeables');
     }
 }

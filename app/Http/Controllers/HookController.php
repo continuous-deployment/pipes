@@ -2,42 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-use GuzzleHttp;
-use App\Api\GitLab\GitLab;
-use App\Api\GitLab\HookRegister;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Pipeline\Pipeline;
+use App\Pipeline\Traveler;
+use Illuminate\Http\Request;
+use Log;
 
 class HookController extends Controller
 {
     /**
      * Handle incomming hooks.
+     * @param Request $request Incomming request object
+     * @param string  $appName Name of the application the hook came from
      *
-     * @param  int  $id
      * @return Response
      */
-    public function recieve(Request $request)
+    public function recieve(Request $request, $appName)
     {
-        $data = $request->all();
-        Log::debug(print_r($data, true));
+        // $data = $request->all();
+        // Log::debug(json_encode($data));
+        // Log::debug(print_r($data, true));
 
-        if (array_key_exists('event_name', $data) && $data['event_name'] == 'project_create') {
-            // store new project in database
-            $projectName = explode('/', $data['path_with_namespace']);
-            $namespace = $projectName[0];
-            $name = $projectName[1];
-            $project = new Project;
-            $project->name = $name;
-            $project->group = $namespace;
-            $project->save();
+        /** @var \App\Hooks\Pier $pier */
+        $pier     = app('Pier');
+        $result   = $pier->sendRequestToCatcher($request, $appName);
+        $traveler = new Traveler();
+        $traveler->give($result);
 
-            $projectId = $data['project_id'];
-            $register = new HookRegister();
-            $register->registerWithProjectId($projectId);
+        if (isset($result['project'])
+            && $result['project'] instanceof Project
+        ) {
+            /** @var \App\Models\Project $project */
+            $project = $result['project'];
+            $this->processProject($project, $traveler);
         }
 
-        return $data;
+        return [
+            'status' => 'Success',
+        ];
+    }
+
+    /**
+     * Processes the project to send
+     *
+     * @param Project  $project  Project model
+     * @param Traveler $traveler Traveler to send down pipeline
+     *
+     * @return void
+     */
+    protected function processProject($project, $traveler)
+    {
+        $conditions = $project->conditions;
+        foreach ($conditions as $condition) {
+            $pipeline = new Pipeline();
+            $pipeline
+                ->send($traveler)
+                ->startWithModel($condition);
+        }
     }
 }

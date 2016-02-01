@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsTable extends Migration
+class CreateAuthAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('auth_accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('project_id');
-            $table->string('name');
-            $table->string('group');
-            $table->string('url')->nullable();
+            $table->string('username');
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('projects');
+        Schema::drop('auth_accounts');
     }
 }

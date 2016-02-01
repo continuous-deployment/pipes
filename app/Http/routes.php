@@ -1,5 +1,10 @@
 <?php
-use App\Api\GitLab\GitLab;
+use App\Api\GitLab\GitLabManager;
+use App\Models\Host;
+use App\Models\Condition;
+use App\Pipeline\Traveler;
+use App\Pipeline\Pipeline;
+use App\Pipeline\PipeFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,20 +17,64 @@ use App\Api\GitLab\GitLab;
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->welcome();
-});
+$app->get(
+    '/',
+    function () use ($app) {
+        /** @var \App\Models\Condition $condition */
+        $condition = Condition::find(1);
+        $traveler = new Traveler();
+        $pipeline = new Pipeline();
+
+        $pipeline
+            ->send($traveler)
+            ->startWithModel($condition);
+
+        $host = Host::find(1);
+        dd($host);
+
+        return $app->welcome();
+    }
+);
 
 // route for easier testing using query strings
-$app->get('/hooks/catch', [
-    'as' => 'hook', 'uses' => 'HookController@recieve'
-]);
-$app->post('/hooks/catch', [
-    'as' => 'hook', 'uses' => 'HookController@recieve'
-]);
+$app->get(
+    '/hooks/{appName}/catch',
+    [
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
+    ]
+);
+$app->post(
+    '/hooks/{appName}/catch',
+    [
+        'as' => 'hook',
+        'uses' => 'HookController@recieve'
+    ]
+);
 
-$app->get('test/auth', function () {
-    $auth = new GitLab();
-    $auth->authenticate();
-    dd($auth->getPrivateToken());
-});
+$app->get(
+    'test/auth',
+    function () {
+        $gitlabs = new GitLabManager();
+        $gitlab  = collect($gitlabs->getInstances())->last();
+        $gitlab->authenticate();
+        dd($gitlab);
+    }
+);
+
+// projects
+$app->get(
+    '/projects',
+    [
+        'as' => 'projects',
+        'uses' => 'ProjectController@all'
+    ]
+);
+
+$app->get(
+    '/projects/{projectId}',
+    [
+        'as' => 'projects',
+        'uses' => 'ProjectController@get'
+    ]
+);

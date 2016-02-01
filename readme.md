@@ -30,3 +30,17 @@ or you ca run the command you want directly:
 ```bash
 docker exec -it pipes_php_1 php composer.phar install
 ```
+
+## Multiple Runners ##
+
+If you want to run more than a single runner you can do so with the scale command:
+
+```bash
+docker-compose scale runner=15
+```
+
+This will scale the group of containers up to 15 runners.
+
+The reverse setting the scale back down to 1 will remove the newer containers.
+
+You may scale up and down as much as you like.
