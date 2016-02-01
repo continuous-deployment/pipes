@@ -38,14 +38,14 @@ $app->get(
 
 // route for easier testing using query strings
 $app->get(
-    '/hooks/{appName}/catch',
+    '{appName}/{hostId}/hooks/catch',
     [
         'as'   => 'hook',
         'uses' => 'HookController@recieve',
     ]
 );
 $app->post(
-    '/hooks/{appName}/catch',
+    '{appName}/{hostId}/hooks/catch',
     [
         'as'   => 'hook',
         'uses' => 'HookController@recieve',
