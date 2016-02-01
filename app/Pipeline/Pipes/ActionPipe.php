@@ -59,8 +59,12 @@ class ActionPipe implements Pipe
      */
     public function processAction(Traveler $traveler)
     {
-        // TODO: Do actual processing.
-        \Log::info('PROCESSING ACTION: ' . $this->action->action);
+        $commands = $this->action->commands;
+
+        foreach ($commands as $command) {
+            // TODO: Do actual processing.
+            \Log::info('PROCESSING ACTION: ' . $command->command);
+        }
 
         return true && $traveler;
     }
