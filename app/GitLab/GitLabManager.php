@@ -2,8 +2,6 @@
 
 namespace App\GitLab;
 
-use App\GitLab\GitLab;
-
 class GitLabManager
 {
     /**
@@ -66,7 +64,7 @@ class GitLabManager
 
     /**
      * Adds a GitLab instance to the array.
-     * @param GitLab $gitlab accepts a gitlab instance
+     * @param  GitLab $gitlab accepts a gitlab instance
      * @return void
      */
     public function addInstance(GitLab $gitlab)
@@ -75,16 +73,21 @@ class GitLabManager
     }
 
     /**
-     * Send an Api request to all the instances
-     * @param string $method     which api method to use
-     * @param string $path       which api to send to
-     * @param array  $formParams what form parameters to send
-     * @return void
+     * Host id to find GitLab instance related to
+     *
+     * @param integer $hostId
+     *
+     * @return GitLab|null
      */
-    public function sendApiRequestToInstances($method, $path, $formParams = [])
+    public function getInstanceByHostId($hostId)
     {
+        /** @var \App\GitLab\GitLab $instance */
         foreach ($this->instances as $instance) {
-            $instance->sendApiRequest($method, $path, $formParams);
+            if ($instance->getHostId() == $hostId) {
+                return $instance;
+            }
         }
+
+        return null;
     }
 }
