@@ -15,7 +15,6 @@ class CreateActionsTable extends Migration
         Schema::create('actions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('host_id')->unsigned()->nullable();
-            $table->string('action');
 
             $table->integer('pipeable_id')->unsigned()->nullable();
             $table->string('pipeable_type')->nullable();
