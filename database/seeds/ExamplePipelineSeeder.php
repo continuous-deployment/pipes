@@ -42,19 +42,14 @@ class ExamplePipelineSeeder extends Seeder
         );
         $secondCondition->save();
 
-        $firstAction = new Action(
-            [
-                'action' => 'npm install',
-            ]
-        );
+        $firstAction = new Action();
         $firstAction->save();
+        $firstAction->addCommand('npm install');
+        $firstAction->addCommand('npm run build');
 
-        $secondAction = new Action(
-            [
-                'action' => 'composer install',
-            ]
-        );
+        $secondAction = new Action();
         $secondAction->save();
+        $secondAction->addCommand('composer install');
 
         $secondCondition->successPipeable()->associate($secondAction)->save();
         $firstSplit->pipeable()->associate($secondCondition);
