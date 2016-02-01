@@ -26,6 +26,10 @@ class ProjectCreateEvent extends GitLabEvent implements Event
      */
     public function process(Request $request)
     {
+        $routeInfo  = $request->route();
+        $parameters = $routeInfo[2];
+        $hostId     = $parameters['hostId'];
+
         $data = $request->all();
 
         // store new project in database
@@ -41,7 +45,7 @@ class ProjectCreateEvent extends GitLabEvent implements Event
         $project->save();
 
         $register = new HookRegister();
-        $register->registerWithProjectId($projectId);
+        $register->registerWithProjectId($projectId, $hostId);
 
         return [
             'project' => $project,
