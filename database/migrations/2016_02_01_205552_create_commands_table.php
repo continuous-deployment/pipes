@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateActionsTable extends Migration
+class CreateCommandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class CreateActionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('actions', function (Blueprint $table) {
+        Schema::create('commands', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('host_id')->unsigned()->nullable();
-
-            $table->integer('pipeable_id')->unsigned()->nullable();
-            $table->string('pipeable_type')->nullable();
+            $table->string('command');
+            $table->integer('action_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateActionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('actions');
+        Schema::drop('commands');
     }
 }

@@ -15,6 +15,15 @@ mysql:
   volumes:
     - .docker/db/data:/var/lib/mysql
 
+cron:
+  image: registry.noprobe.co.uk/nginx-phpfpm
+  volumes_from:
+    - php
+  links:
+    - mysql:mysql
+  command:
+    - "/var/www/scripts/cron.py"
+
 queue_runner_default:
   image: registry.noprobe.co.uk/nginx-phpfpm
   volumes_from:

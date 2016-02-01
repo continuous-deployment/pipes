@@ -1,10 +1,8 @@
 <?php
 use App\Api\GitLab\GitLabManager;
-use App\Models\Host;
 use App\Models\Condition;
-use App\Pipeline\Traveler;
 use App\Pipeline\Pipeline;
-use App\Pipeline\PipeFactory;
+use App\Pipeline\Traveler;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +20,17 @@ $app->get(
     function () use ($app) {
         /** @var \App\Models\Condition $condition */
         $condition = Condition::find(1);
-        $traveler = new Traveler();
-        $pipeline = new Pipeline();
+        $traveler  = new Traveler();
+        $traveler->give([
+            'event' => [
+                'type' => 'push',
+            ],
+        ]);
+        $pipeline  = new Pipeline();
 
         $pipeline
             ->send($traveler)
             ->startWithModel($condition);
-
-        $host = Host::find(1);
-        dd($host);
 
         return $app->welcome();
     }
@@ -40,15 +40,15 @@ $app->get(
 $app->get(
     '/hooks/{appName}/catch',
     [
-        'as' => 'hook',
-        'uses' => 'HookController@recieve'
+        'as'   => 'hook',
+        'uses' => 'HookController@recieve',
     ]
 );
 $app->post(
     '/hooks/{appName}/catch',
     [
-        'as' => 'hook',
-        'uses' => 'HookController@recieve'
+        'as'   => 'hook',
+        'uses' => 'HookController@recieve',
     ]
 );
 
@@ -66,15 +66,15 @@ $app->get(
 $app->get(
     '/projects',
     [
-        'as' => 'projects',
-        'uses' => 'ProjectController@all'
+        'as'   => 'projects',
+        'uses' => 'ProjectController@all',
     ]
 );
 
 $app->get(
     '/projects/{projectId}',
     [
-        'as' => 'projects',
-        'uses' => 'ProjectController@get'
+        'as'   => 'projects',
+        'uses' => 'ProjectController@get',
     ]
 );
