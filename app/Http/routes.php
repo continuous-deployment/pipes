@@ -40,15 +40,15 @@ $app->get(
 $app->get(
     '/hooks/{appName}/catch',
     [
-        'as' => 'hook',
-        'uses' => 'HookController@recieve'
+        'as'   => 'hook',
+        'uses' => 'HookController@recieve',
     ]
 );
 $app->post(
     '/hooks/{appName}/catch',
     [
-        'as' => 'hook',
-        'uses' => 'HookController@recieve'
+        'as'   => 'hook',
+        'uses' => 'HookController@recieve',
     ]
 );
 
@@ -66,15 +66,15 @@ $app->get(
 $app->get(
     '/projects',
     [
-        'as' => 'projects',
-        'uses' => 'ProjectController@all'
+        'as'   => 'projects',
+        'uses' => 'ProjectController@all',
     ]
 );
 
 $app->get(
     '/projects/{projectId}',
     [
-        'as' => 'projects',
-        'uses' => 'ProjectController@get'
+        'as'   => 'projects',
+        'uses' => 'ProjectController@get',
     ]
 );
