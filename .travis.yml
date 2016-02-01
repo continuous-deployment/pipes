@@ -1,5 +1,4 @@
 sudo: required
-language: php
 services:
   - docker
 before_install:
@@ -8,4 +7,5 @@ before_install:
   - cp .env.testing .env
   - touch database/database.sqlite
 script:
+  - docker exec -it pipes php composer.phar install
   - docker exec -it pipes php artisan migrate
