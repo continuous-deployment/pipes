@@ -52,8 +52,8 @@ class PushEvent extends GitLabEvent implements Event
             'project' => $project,
             'commits' => $commits,
             'event'   => [
-                'type' => 'push'
-            ]
+                'type' => 'push',
+            ],
         ];
     }
 
@@ -86,15 +86,18 @@ class PushEvent extends GitLabEvent implements Event
         $commitModels = [];
 
         foreach ($commits as $recievedCommit) {
-            $commit               = new Commit();
-            $commit->commit_id    = $recievedCommit['id'];
-            $commit->message      = $recievedCommit['message'];
-            $commit->url          = $recievedCommit['url'];
-            $commit->timestamp    = $recievedCommit['timestamp'];
-            $commit->author_name  = $recievedCommit['author']['name'];
-            $commit->author_email = $recievedCommit['author']['email'];
-            $commit->project_id   = $project->project_id;
-            $commit->save();
+            $commit = Commit::firstOrCreate(
+                [
+                    'commit_id'    => $recievedCommit['id'],
+                    'message'      => $recievedCommit['message'],
+                    'url'          => $recievedCommit['url'],
+                    'timestamp'    => $recievedCommit['timestamp'],
+                    'author_name'  => $recievedCommit['author']['name'],
+                    'author_email' => $recievedCommit['author']['email'],
+                    'project_id'   => $project->project_id,
+                ]
+            );
+
             $commitModels[] = $commit;
         }
 
