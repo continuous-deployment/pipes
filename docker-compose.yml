@@ -24,9 +24,27 @@ cron:
   command:
     - "/var/www/scripts/cron.py"
 
-runner:
-  image: registry.noprobe.co.uk/pipes-runner
+queue_runner_default:
+  image: registry.noprobe.co.uk/nginx-phpfpm
   volumes_from:
     - php
   links:
     - mysql:mysql
+  command: /var/www/scripts/queue-runner.sh default
+
+queue_runner_actions_1:
+  image: registry.noprobe.co.uk/nginx-phpfpm
+  volumes_from:
+    - php
+  links:
+    - mysql:mysql
+  command: /var/www/scripts/queue-runner.sh actions
+
+queue_runner_notifications_1:
+  image: registry.noprobe.co.uk/nginx-phpfpm
+  volumes_from:
+    - php
+  links:
+    - mysql:mysql
+  command: /var/www/scripts/queue-runner.sh notifications
+
