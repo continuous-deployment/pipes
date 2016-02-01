@@ -2,6 +2,7 @@
 
 namespace App\GitLab;
 
+use App\Models\Host;
 use GuzzleHttp;
 
 /**
@@ -34,6 +35,12 @@ class GitLab
      * @var string
      */
     protected $host;
+
+    /**
+     * Host id for the GitLab
+     * @var integer
+     */
+    protected $hostId;
 
     /**
      * User object returned by GitLab
@@ -86,6 +93,8 @@ class GitLab
         $this->password     = $password;
         $this->privateToken = $privateToken;
         $this->host         = $host;
+
+        $this->getHostIdFromDatabase();
     }
 
     /**
@@ -182,6 +191,43 @@ class GitLab
     public function getPrivateTokenProperty()
     {
         return $this->privateToken;
+    }
+
+    /**
+     * Gets the host id from the DB using the host url and sets it to the
+     * host id property
+     *
+     * @return void
+     */
+    protected function getHostIdFromDatabase()
+    {
+        if ($this->getHost() === null) {
+            return;
+        }
+
+        $parsedUrl = parse_url($this->getHost());
+
+        $host = Host::firstOrCreate(
+            [
+                'host' => $parsedUrl['host'],
+                'port' => $parsedUrl['port'],
+            ]
+        );
+        $this->hostId = $host->id;
+    }
+
+    /**
+     * Returns the host id of this GitLab instance
+     *
+     * @return integer
+     */
+    public function getHostId()
+    {
+        if ($this->hostId === null) {
+            $this->getHostIdFromDatabase();
+        }
+
+        return $this->hostId;
     }
 
     /**
