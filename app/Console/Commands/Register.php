@@ -79,6 +79,8 @@ class Register extends Command
         if ($registerType == '' || !$this->registrars->has($registerType)) {
             $this->error('Unable to register that. Please try again.');
             $this->whatWouldYouLikeToRegister();
+
+            return;
         }
 
         $this->registrars->get($registerType)->register();

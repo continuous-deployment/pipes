@@ -2,6 +2,7 @@
 
 namespace App\GitLab;
 
+use App\Models\Host;
 use GuzzleHttp;
 
 /**
@@ -34,6 +35,12 @@ class GitLab
      * @var string
      */
     protected $host;
+
+    /**
+     * Host id for the GitLab
+     * @var integer
+     */
+    protected $hostId;
 
     /**
      * User object returned by GitLab
@@ -86,10 +93,13 @@ class GitLab
         $this->password     = $password;
         $this->privateToken = $privateToken;
         $this->host         = $host;
+
+        $this->getHostIdFromDatabase();
     }
 
     /**
      * Authenticates the given username and password with GitLab
+     *
      * @return self
      */
     public function authenticate()
@@ -117,10 +127,12 @@ class GitLab
 
     /**
      * Sends an API request to GitLab
-     * @param  string $httpAction   HTTP action GET|POST|PUT..etc
-     * @param  string $path         Path excluding the api/$version
-     * @param  array  $formParams   Array of any form params to send.
-     * @param  string $privateToken Pass in false for no auth token.
+     *
+     * @param string $httpAction   HTTP action GET|POST|PUT..etc
+     * @param string $path         Path excluding the api/$version
+     * @param array  $formParams   Array of any form params to send.
+     * @param string $privateToken Pass in false for no auth token.
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function sendApiRequest(
@@ -144,7 +156,7 @@ class GitLab
             }
 
             $options['headers'] = [
-                'PRIVATE-TOKEN' => $privateToken
+                'PRIVATE-TOKEN' => $privateToken,
             ];
         }
 
@@ -155,6 +167,7 @@ class GitLab
 
     /**
      * Gets the private token to use for talking to GitLabs API.
+     *
      * @return null|string
      */
     public function getPrivateToken()
@@ -172,6 +185,7 @@ class GitLab
 
     /**
      * Gets the private token property value
+     *
      * @return string
      */
     public function getPrivateTokenProperty()
@@ -180,7 +194,45 @@ class GitLab
     }
 
     /**
+     * Gets the host id from the DB using the host url and sets it to the
+     * host id property
+     *
+     * @return void
+     */
+    protected function getHostIdFromDatabase()
+    {
+        if ($this->getHost() === null) {
+            return;
+        }
+
+        $parsedUrl = parse_url($this->getHost());
+
+        $host = Host::firstOrCreate(
+            [
+                'host' => $parsedUrl['host'],
+                'port' => isset($parsedUrl['port']) ? $parsedUrl['port'] : '',
+            ]
+        );
+        $this->hostId = $host->id;
+    }
+
+    /**
+     * Returns the host id of this GitLab instance
+     *
+     * @return integer
+     */
+    public function getHostId()
+    {
+        if ($this->hostId === null) {
+            $this->getHostIdFromDatabase();
+        }
+
+        return $this->hostId;
+    }
+
+    /**
      * Get the host for the GitLab
+     *
      * @return string
      */
     public function getHost()
@@ -190,6 +242,7 @@ class GitLab
 
     /**
      * Get the user object returned by GitLab
+     *
      * @return stdClass
      */
     public function getUser()
@@ -199,6 +252,7 @@ class GitLab
 
     /**
      * Get the username used to authenticate with GitLab
+     *
      * @return string
      */
     public function getUsername()
@@ -208,6 +262,7 @@ class GitLab
 
     /**
      * Get the password used to authenticate with GitLab
+     *
      * @return string
      */
     public function getPassword()
@@ -216,7 +271,8 @@ class GitLab
     }
 
     /**
-     * Checks if the GitLab instance as tried to authenticate.
+     * Checks if the GitLab instance as tried to authenticate
+     *
      * @return bool
      */
     public function hasAuthenticated()
@@ -226,6 +282,7 @@ class GitLab
 
     /**
      * Checks if the config has been loaded from envs or passed in via params
+     *
      * @return boolean
      */
     public function configLoaded()

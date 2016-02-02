@@ -12,9 +12,8 @@ class Host extends Model
      * @var array
      */
     protected $fillable = [
-        'ip',
+        'host',
         'port',
-        'hostname'
     ];
 
     /**
@@ -23,7 +22,7 @@ class Host extends Model
      * @var array
      */
     protected $with = [
-        'auth'
+        'auth',
     ];
 
     /**

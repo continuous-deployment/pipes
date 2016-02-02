@@ -29,16 +29,23 @@ class HookRegister
     /**
      * Register project hooks on GitLab
      * @param  string|integer $projectId The id of the project.
+     * @param  string|integer $hostId    The host id for the GitLab
      * @return void
      */
-    public function registerWithProjectId($projectId)
+    public function registerWithProjectId($projectId, $hostId)
     {
-        $this->gitlab->sendApiRequestToInstances(
+        $gitlab = $this->gitlab->getInstanceByHostId($hostId);
+
+        if ($gitlab === null) {
+            return;
+        }
+
+        $gitlab->sendApiRequest(
             'POST',
             'projects/' . $projectId . '/hooks',
             [
                 'id'                    => $projectId,
-                'url'                   => $this->getHookCatchUrl(),
+                'url'                   => $this->getHookCatchUrl($hostId),
                 'push_events'           => true,
                 'issues_events'         => true,
                 'merge_requests_events' => true,
@@ -55,23 +62,36 @@ class HookRegister
      */
     public function registerSystemHooksOnInstances()
     {
-        $this->gitlab->sendApiRequestToInstances(
-            'POST',
-            'hooks',
-            [
-                'url' => $this->getHookCatchUrlFromCli(),
-            ]
-        );
+        /** @var \App\GitLab\GitLab $instance */
+        foreach ($this->gitlab->getInstances() as $instance) {
+            $instance->sendApiRequest(
+                'POST',
+                'hooks',
+                [
+                    'url' => $this->getHookCatchUrlFromCli(
+                        $instance->getHostId()
+                    ),
+                ]
+            );
+        }
     }
 
     /**
      * Gets the url for the hook catching
      *
+     * @param string|integer $hostId The host id for the GitLab
+     *
      * @return string
      */
-    protected function getHookCatchUrl()
+    protected function getHookCatchUrl($hostId)
     {
-        $url = route('hook', ['appName' => 'gitlab']);
+        $url = route(
+            'hook',
+            [
+                'appName' => 'gitlab',
+                'hostId'  => $hostId,
+            ]
+        );
 
         return $url;
     }
@@ -79,11 +99,13 @@ class HookRegister
     /**
      * Get the hook catch url when access from cli
      *
+     * @param string|integer $hostId The host id for the GitLab
+     *
      * @return string
      */
-    protected function getHookCatchUrlFromCli()
+    protected function getHookCatchUrlFromCli($hostId)
     {
-        $url  = $this->getHookCatchUrl();
+        $url  = $this->getHookCatchUrl($hostId);
         $path = str_replace(['http://:', 'https://:'], '', $url);
         $url  = env('PIPES_URL') . $path;
 

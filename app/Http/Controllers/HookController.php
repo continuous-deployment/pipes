@@ -6,7 +6,6 @@ use App\Models\Project;
 use App\Pipeline\Pipeline;
 use App\Pipeline\Traveler;
 use Illuminate\Http\Request;
-use Log;
 
 class HookController extends Controller
 {
@@ -19,13 +18,20 @@ class HookController extends Controller
      */
     public function recieve(Request $request, $appName)
     {
-        // $data = $request->all();
-        // Log::debug(json_encode($data));
-        // Log::debug(print_r($data, true));
-
         /** @var \App\Hooks\Pier $pier */
-        $pier     = app('Pier');
-        $result   = $pier->sendRequestToCatcher($request, $appName);
+        $pier   = app('Pier');
+        $result = $pier->sendRequestToCatcher($request, $appName);
+
+        if ($result === false) {
+            \Log::error('Unable to handle request ' . $request->getUri());
+            \Log::error(json_encode($request->all(), JSON_PRETTY_PRINT));
+
+            return [
+                'status'  => 'Failure',
+                'message' => 'Unable to handle this type of request',
+            ];
+        }
+
         $traveler = new Traveler();
         $traveler->give($result);
 
