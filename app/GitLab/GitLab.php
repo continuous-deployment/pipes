@@ -210,7 +210,7 @@ class GitLab
         $host = Host::firstOrCreate(
             [
                 'host' => $parsedUrl['host'],
-                'port' => $parsedUrl['port'],
+                'port' => isset($parsedUrl['port']) ? $parsedUrl['port'] : '',
             ]
         );
         $this->hostId = $host->id;
