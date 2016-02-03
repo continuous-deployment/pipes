@@ -3,7 +3,7 @@ language: php
 php:
   - '5.6'
 before_install:
-  - pecl install -a channel://pecl.php.net/ssh2-0.12
+  - pecl install -f channel://pecl.php.net/ssh2-0.12
   - cp .env.testing .env
   - touch database/database.sqlite
 script:
