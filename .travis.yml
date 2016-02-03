@@ -1,6 +1,11 @@
 language: php
 php:
   - '5.6'
+dist: trusty  # Require libssh >= 0.6.0
+addons:
+  apt:
+    packages:
+      - libssh-dev
 before_install:
   - yes '' | pecl install channel://pecl.php.net/ssh2-0.12
   - cp .env.testing .env
