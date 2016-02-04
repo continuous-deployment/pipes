@@ -14,4 +14,11 @@ interface Pipe
      * @return \Illuminate\Database\Eloquent\Model|array
      */
     public function flowThrough(Bag $bag);
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel();
 }

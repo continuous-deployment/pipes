@@ -44,4 +44,14 @@ class SplitterPipe implements Pipe
 
         return $pipeables;
     }
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->splitter;
+    }
 }

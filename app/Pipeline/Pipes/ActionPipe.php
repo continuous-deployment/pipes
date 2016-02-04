@@ -65,4 +65,14 @@ class ActionPipe implements Pipe
 
         return true && $bag;
     }
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->action;
+    }
 }

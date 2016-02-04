@@ -119,4 +119,14 @@ class ConditionPipe implements Pipe
             return $fieldValue <= $this->condition->value;
         }
     }
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->condition;
+    }
 }
