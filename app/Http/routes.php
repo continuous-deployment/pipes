@@ -2,7 +2,7 @@
 use App\Api\GitLab\GitLabManager;
 use App\Models\Condition;
 use App\Pipeline\Pipeline;
-use App\Pipeline\Traveler;
+use App\Pipeline\Traveler\Traveler;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ $app->get(
         /** @var \App\Models\Condition $condition */
         $condition = Condition::find(1);
         $traveler  = new Traveler();
-        $traveler->give([
+        $traveler->bag->give([
             'event' => [
                 'type' => 'push',
             ],
