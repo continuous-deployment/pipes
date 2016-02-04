@@ -4,16 +4,37 @@ namespace App\Pipeline\Traveler;
 
 use App\Pipeline\Pipe;
 use App\Pipeline\PipeFactory;
+use App\Pipeline\PipeIdentifier;
+use Illuminate\Contracts\Database\ModelIdentifier;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Lumen\Routing\DispatchesJobs;
+use Illuminate\Contracts\Bus\SelfHandling;
 
-class Traveler
+class Traveler implements ShouldQueue, SelfHandling
 {
+    use DispatchesJobs;
+
     /**
      * Bag that holds all the travelers items
      *
      * @var \App\Pipeline\Traveler\Bag
      */
     public $bag;
+
+    /**
+     * Array of all the pipes this traveler has been down
+     *
+     * @var \App\Pipeline\Pipe[]
+     */
+    protected $previousPipes = [];
+
+    /**
+     * Next pipe to process
+     *
+     * @var \App\Pipeline\Pipe
+     */
+    protected $nextPipe;
 
     /**
      * Constructor
@@ -43,8 +64,10 @@ class Traveler
             return;
         }
 
+        $this->previousPipes[] = $pipe;
+
         foreach ($pipes as $pipe) {
-            $this->travel($pipe);
+            $this->queueTravel($pipe);
         }
     }
 
@@ -95,5 +118,73 @@ class Traveler
         }
 
         return $pipes;
+    }
+
+    /**
+     * Queues the travel
+     *
+     * @param  Pipe $nextPipe Next pipe to process when handled by queue
+     *
+     * @return void
+     */
+    public function queueTravel(Pipe $nextPipe)
+    {
+        $this->nextPipe = $nextPipe;
+
+        $this->dispatch($this);
+    }
+
+    /**
+     * Handles the job
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $this->travel($this->nextPipe);
+    }
+
+    /**
+     * Prepare the instance for serialization.
+     *
+     * @return array All the properties to serialize
+     */
+    public function __sleep()
+    {
+        $this->bag->serialize();
+
+        $this->previousPipes = array_map(
+            function ($pipe) {
+                return new PipeIdentifier($pipe);
+            },
+            $this->previousPipes
+        );
+
+        $this->nextPipe = new PipeIdentifier($this->nextPipe);
+
+        return [
+            'previousPipes',
+            'nextPipe',
+            'bag'
+        ];
+    }
+
+    /**
+     * Restore the instance after serialization.
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $this->bag->unserialize();
+
+        $this->previousPipes = array_map(
+            function ($pipeIdentifier) {
+                return PipeFactory::makeFromPipeIdentifier($pipeIdentifier);
+            },
+            $this->previousPipes
+        );
+
+        $this->nextPipe = PipeFactory::makeFromPipeIdentifier($this->nextPipe);
     }
 }
