@@ -4,8 +4,8 @@ namespace App\Pipeline\Pipes;
 
 use App\Models\Splitter;
 use App\Pipeline\Pipe;
-use App\Pipeline\PipeFactory;
-use App\Pipeline\Traveler;
+use App\Pipeline\Traveler\Bag;
+use App\Pipeline\Traveler\Traveler;
 
 class SplitterPipe implements Pipe
 {
@@ -29,20 +29,19 @@ class SplitterPipe implements Pipe
     /**
      * Handles the incoming traveler and perform necessary action
      *
-     * @param  Traveler $traveler The data sent from the previous pipe.
-     * @return void
+     * @param Bag $bag The data sent from the previous pipe.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|array
+     * @SuppressWarnings("unused")
      */
-    public function flowThrough(Traveler $traveler)
+    public function flowThrough(Bag $bag)
     {
+        $pipeables = [];
+
         foreach ($this->splitter->splits as $split) {
-            $pipeable = $split->pipeable;
-            $pipe = PipeFactory::make($pipeable);
-
-            if ($pipe === null) {
-                continue;
-            }
-
-            $pipe->flowThrough($traveler);
+            $pipeables[] = $split->pipeable;
         }
+
+        return $pipeables;
     }
 }
