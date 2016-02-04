@@ -6,9 +6,7 @@ use App\Models\Action;
 use App\Pipeline\Pipe;
 use App\Pipeline\PipeFactory;
 use App\Pipeline\Traveler;
-use Ssh\Authentication\Password;
-use Ssh\Configuration;
-use Ssh\Session;
+use App\Http\Controllers\SecureShellController;
 
 class ActionPipe implements Pipe
 {
@@ -69,13 +67,14 @@ class ActionPipe implements Pipe
             \Log::info('PROCESSING ACTION: ' . $command->command);
             $prefix = 'ssh ';
             if (substr($command->command, 0, strlen($prefix)) == $prefix) {
-                $sshCommand = substr($command->command, strlen($prefix));
-                $configuration = new Configuration(env('SSH_HOST'));
-                $session = new Session($configuration);
-                $authentication = new Password(env('SSH_USER'), env('SSH_PASSWORD'));
-                $login = $authentication->authenticate($session->getResource());
-                $exec = $session->getExec();
-                \Log::info($exec->run($sshCommand));
+                $sshCommands = [];
+                $sshCommands[] = substr($command->command, strlen($prefix));
+
+                $auth = new stdClass;
+                $auth->host = env('SSH_HOST');
+                $auth->username = env('SSH_USER');
+                $auth->password = env('SSH_PASSWORD');
+                SecureShellController::executeCommands($auth, $sshCommands);
             }
         }
 
