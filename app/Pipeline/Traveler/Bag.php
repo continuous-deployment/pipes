@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Pipeline;
+namespace App\Pipeline\Traveler;
 
-use ArrayAccess;
 use Illuminate\Support\Arr;
-use ReflectionClass;
 
-class Traveler
+class Bag
 {
     /**
     * Array of items the traveler is holding
@@ -14,6 +12,14 @@ class Traveler
      * @var array
      */
     protected $items;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->items = [];
+    }
 
     /**
      * Have a look at one of the travelers items
