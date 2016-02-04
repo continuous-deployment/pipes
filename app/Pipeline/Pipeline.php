@@ -2,6 +2,7 @@
 
 namespace App\Pipeline;
 
+use App\Pipeline\Traveler\Traveler;
 use Illuminate\Database\Eloquent\Model;
 
 class Pipeline
@@ -9,7 +10,7 @@ class Pipeline
     /**
      * Object that will get passed to each pipe
      *
-     * @var \App\Pipeline\Traveler
+     * @var \App\Pipeline\Traveler\Traveler
      */
     protected $traveler;
 
@@ -34,7 +35,11 @@ class Pipeline
      */
     public function startWith(Pipe $initialPipe)
     {
-        $initialPipe->flowThrough($this->traveler);
+        if ($this->traveler === null) {
+            $this->traveler = new Traveler();
+        }
+
+        $this->traveler->travel($initialPipe);
     }
 
     /**
