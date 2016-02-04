@@ -2,6 +2,7 @@
 
 namespace App\Pipeline\Traveler;
 
+use ReflectionClass;
 use Illuminate\Support\Arr;
 
 class Bag
@@ -79,5 +80,49 @@ class Bag
         }
 
         $this->items = Arr::set($this->items, strtolower($key), $value);
+    }
+
+    /**
+     * Serializes the bag
+     *
+     * @return void
+     */
+    public function serialize()
+    {
+        $this->items = array_map(
+            function ($item) {
+                if ($item instanceof Model) {
+                    $modelIdentifier = new ModelIdentifier(
+                        get_class($item),
+                        $item->getQueueableId()
+                    );
+
+                    return $modelIdentifier;
+                }
+
+                return $item;
+            },
+            $this->items
+        );
+    }
+
+    /**
+     * Unserializes the bag
+     *
+     * @return void
+     */
+    public function unserialize()
+    {
+        $this->items = array_map(
+            function ($item) {
+                if ($item instanceof ModelIdentifier) {
+                    return (new $item->class)
+                        ->findOrFail($item->id);
+                }
+
+                return $item;
+            },
+            $this->items
+        );
     }
 }
