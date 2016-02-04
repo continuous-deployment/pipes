@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Pipeline\Pipeline;
-use App\Pipeline\Traveler;
+use App\Pipeline\Traveler\Traveler;
 use Illuminate\Http\Request;
 
 class HookController extends Controller
@@ -33,7 +33,7 @@ class HookController extends Controller
         }
 
         $traveler = new Traveler();
-        $traveler->give($result);
+        $traveler->bag->give($result);
 
         if (isset($result['project'])
             && $result['project'] instanceof Project

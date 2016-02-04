@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Pipeline;
+namespace App\Pipeline\Traveler;
 
-use ArrayAccess;
-use Illuminate\Support\Arr;
 use ReflectionClass;
+use Illuminate\Support\Arr;
 
-class Traveler
+class Bag
 {
     /**
     * Array of items the traveler is holding
@@ -14,6 +13,14 @@ class Traveler
      * @var array
      */
     protected $items;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->items = [];
+    }
 
     /**
      * Have a look at one of the travelers items
@@ -73,5 +80,49 @@ class Traveler
         }
 
         $this->items = Arr::set($this->items, strtolower($key), $value);
+    }
+
+    /**
+     * Serializes the bag
+     *
+     * @return void
+     */
+    public function serialize()
+    {
+        $this->items = array_map(
+            function ($item) {
+                if ($item instanceof Model) {
+                    $modelIdentifier = new ModelIdentifier(
+                        get_class($item),
+                        $item->getQueueableId()
+                    );
+
+                    return $modelIdentifier;
+                }
+
+                return $item;
+            },
+            $this->items
+        );
+    }
+
+    /**
+     * Unserializes the bag
+     *
+     * @return void
+     */
+    public function unserialize()
+    {
+        $this->items = array_map(
+            function ($item) {
+                if ($item instanceof ModelIdentifier) {
+                    return (new $item->class)
+                        ->findOrFail($item->id);
+                }
+
+                return $item;
+            },
+            $this->items
+        );
     }
 }

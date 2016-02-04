@@ -4,8 +4,7 @@ namespace App\Pipeline\Pipes;
 
 use App\Models\Action;
 use App\Pipeline\Pipe;
-use App\Pipeline\PipeFactory;
-use App\Pipeline\Traveler;
+use App\Pipeline\Traveler\Bag;
 
 class ActionPipe implements Pipe
 {
@@ -29,12 +28,13 @@ class ActionPipe implements Pipe
     /**
      * Handles the incoming traveler and perform necessary action
      *
-     * @param  Traveler $traveler The data sent from the previous pipe.
-     * @return void
+     * @param Bag $bag The data sent from the previous pipe.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|array
      */
-    public function flowThrough(Traveler $traveler)
+    public function flowThrough(Bag $bag)
     {
-        $result = $this->processAction($traveler);
+        $result = $this->processAction($bag);
 
         if ($result) {
             \Log::info('SUCCESSLY PROCESSED ACTION');
@@ -43,21 +43,18 @@ class ActionPipe implements Pipe
         }
 
         $pipeable = $this->action->pipeable;
-        $pipe     = PipeFactory::make($pipeable);
-        if ($pipe === null) {
-            return;
-        }
 
-        $pipe->flowThrough($traveler);
+        return $pipeable;
     }
 
     /**
      * Processes the action
      *
-     * @param  Traveler $traveler Traveler object
+     * @param Bag $bag Travelers Bag object
+     *
      * @return boolean
      */
-    public function processAction(Traveler $traveler)
+    public function processAction(Bag $bag)
     {
         $commands = $this->action->commands;
 
@@ -66,6 +63,16 @@ class ActionPipe implements Pipe
             \Log::info('PROCESSING ACTION: ' . $command->command);
         }
 
-        return true && $traveler;
+        return true && $bag;
+    }
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->action;
     }
 }

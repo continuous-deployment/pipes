@@ -4,8 +4,7 @@ namespace App\Pipeline\Pipes;
 
 use App\Models\Condition;
 use App\Pipeline\Pipe;
-use App\Pipeline\PipeFactory;
-use App\Pipeline\Traveler;
+use App\Pipeline\Traveler\Bag;
 
 class ConditionPipe implements Pipe
 {
@@ -29,36 +28,29 @@ class ConditionPipe implements Pipe
     /**
      * Handles the incoming traveler and perform necessary action
      *
-     * @param  Traveler $traveler The data sent from the previous pipe.
-     * @return void
+     * @param Bag $bag The data sent from the previous pipe.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|array
      */
-    public function flowThrough(Traveler $traveler)
+    public function flowThrough(Bag $bag)
     {
-        $pipe = null;
-
-        if ($this->runCondition($traveler)) {
-            $pipe = PipeFactory::make($this->condition->success_pipeable);
-        } else {
-            $pipe = PipeFactory::make($this->condition->failure_pipeable);
+        if ($this->runCondition($bag)) {
+            return $this->condition->success_pipeable;
         }
 
-        if ($pipe === null) {
-            return;
-        }
-
-        $pipe->flowThrough($traveler);
+        return $this->condition->failure_pipeable;
     }
 
     /**
      * Run the condition using the values from the condition model
      *
-     * @param Traveler $traveler Traveler object with data from the pipeline
+     * @param Bag $bag Traveler bag object with data from the pipeline
      *
      * @return boolean
      */
-    protected function runCondition(Traveler $traveler)
+    protected function runCondition(Bag $bag)
     {
-        $fieldValue = $traveler->lookAt($this->condition->field);
+        $fieldValue = $bag->lookAt($this->condition->field);
         $operator   = $this->condition->operator;
 
         if ($this->checkEqualsAndNotEquals($operator, $fieldValue)) {
@@ -126,5 +118,15 @@ class ConditionPipe implements Pipe
         if ($operator === '<=') {
             return $fieldValue <= $this->condition->value;
         }
+    }
+
+    /**
+     * Gets the model related to this pipe
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->condition;
     }
 }

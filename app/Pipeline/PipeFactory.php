@@ -2,6 +2,7 @@
 
 namespace App\Pipeline;
 
+use App\Pipeline\PipeIdentifier;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
@@ -25,6 +26,31 @@ class PipeFactory
 
         if ($identifier instanceof Model) {
             return self::makeFromModel($identifier);
+        }
+
+        return null;
+    }
+
+    /**
+     * Makes pipe from the pipe identifier given
+     *
+     * @param  PipeIdentifier $identifier Identifier to make from
+     *
+     * @return \App\Pipeline\Pipe|null
+     */
+    public static function makeFromPipeIdentifier(PipeIdentifier $identifier)
+    {
+        $class = $identifier->getClass();
+
+        if (class_exists($class)) {
+            $modelIdentifier = $identifier->getModelIdentifier();
+
+            $model = (new $modelIdentifier->class)
+                ->findOrFail($modelIdentifier->id);
+
+            $mysteriousPipe = new $class($model);
+
+            return $mysteriousPipe;
         }
 
         return null;
