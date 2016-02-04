@@ -35,7 +35,6 @@ class Register extends Command
         parent::__construct();
 
         $this->registrars = collect();
-        $this->registrars->put('GitLab', new GitLabRegistrar($this));
     }
 
     /**
@@ -45,6 +44,7 @@ class Register extends Command
      */
     public function handle()
     {
+        $this->registrars->put('GitLab', new GitLabRegistrar($this));
         $this->whatWouldYouLikeToRegister();
     }
 
