@@ -49,7 +49,7 @@ class ExamplePipelineSeeder extends Seeder
 
         $secondAction = new Action();
         $secondAction->save();
-        $secondAction->addCommand('composer install');
+        $secondAction->addCommand('ssh ls');
 
         $secondCondition->successPipeable()->associate($secondAction)->save();
         $firstSplit->pipeable()->associate($secondCondition);
