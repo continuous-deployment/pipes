@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property \App\Models\Auth $auth Auth model related to this host
+ */
 class Host extends Model
 {
     /**
