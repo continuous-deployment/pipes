@@ -14,7 +14,6 @@ class CreateAuthsTable extends Migration
     {
         Schema::create('auths', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type');
             $table->integer('credentials_id')->unsigned();
             $table->string('credentials_type');
             $table->timestamps();
