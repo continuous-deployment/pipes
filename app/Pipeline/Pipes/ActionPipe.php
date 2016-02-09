@@ -56,14 +56,16 @@ class ActionPipe implements Pipe
      */
     public function processAction(Bag $bag)
     {
-        $commands = $this->action->commands;
+        $type = $this->action->host->type;
 
-        foreach ($commands as $command) {
-            // TODO: Do actual processing.
-            \Log::info('PROCESSING ACTION: ' . $command->command);
-        }
+        /** @var \App\Pipeline\Execution\Manager $executorManager */
+        $executorManager = app('ExecutorManager');
+        $executor = $executorManager->getByType($type);
 
-        return true && $bag;
+        $output = $executor->execute($this->action);
+        $bag->give($output)
+
+        return true;
     }
 
     /**
