@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Pipeline\Execution\Executors\SSHExecutor;
-use App\Pipeline\Executors\Manager;
+use App\Pipeline\Execution\Manager;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
