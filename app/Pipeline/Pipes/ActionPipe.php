@@ -56,6 +56,10 @@ class ActionPipe implements Pipe
      */
     public function processAction(Bag $bag)
     {
+        if ($this->action->host === null) {
+            return true;
+        }
+        
         $type = $this->action->host->type;
 
         /** @var \App\Pipeline\Execution\Manager $executorManager */
