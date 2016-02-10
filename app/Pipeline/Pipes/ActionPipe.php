@@ -37,9 +37,9 @@ class ActionPipe implements Pipe
         $result = $this->processAction($bag);
 
         if ($result) {
-            \Log::info('SUCCESSLY PROCESSED ACTION');
+            \Log::info('SUCCESSFULLY PROCESSED ACTION');
         } else {
-            \Log::info('UNSUCCESSLY PROCESSED ACTION');
+            \Log::info('UNSUCCESSFULLY PROCESSED ACTION');
         }
 
         $pipeable = $this->action->pipeable;
@@ -56,18 +56,22 @@ class ActionPipe implements Pipe
      */
     public function processAction(Bag $bag)
     {
-        if ($this->action->host === null) {
-            return true;
-        }
-        
-        $type = $this->action->host->type;
+        $type = $this->action->type;
 
         /** @var \App\Pipeline\Execution\Manager $executorManager */
         $executorManager = app('ExecutorManager');
         $executor = $executorManager->getByType($type);
 
+        if ($executor === null) {
+            return false;
+        }
+
         $output = $executor->execute($this->action);
-        $bag->give($output)
+        if ($output === false) {
+            return false;
+        }
+
+        $bag->give($output, 'ExecutorOutput');
 
         return true;
     }
