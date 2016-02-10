@@ -24,13 +24,23 @@ class SSHExecutor extends Executor
      */
     public function execute(Action $action)
     {
-        $auth = $action->host;
-        $commands = $action->commands;
+        if ($action->host === null) {
+            return false;
+        }
 
+        $auth = $action->host->auth;
+
+        if ($auth === null) {
+            return false;
+        }
+
+        $commands = $action->commands;
         $session = $this->getSSHSession($auth);
 
         // Actually do the processing for SSH
-        dd($auth, $commands, $session);
+        // dd($auth, $commands, $session);
+        //
+        return true;
     }
 
     /**
