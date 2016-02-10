@@ -78,7 +78,7 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Hooks\HooksServiceProvider::class);
 $app->register(App\GitLab\GitLabServiceProvider::class);
