@@ -50,7 +50,7 @@ class ExamplePipelineSeeder extends Seeder
             'type' => 'ssh',
         ]);
         $host = new Host([
-            'host' => '127.0.0.1',
+            'host' => 'ssh',
             'port' => '22',
         ]);
 
@@ -64,15 +64,15 @@ class ExamplePipelineSeeder extends Seeder
         $keyAuth->location = getenv('SSH_KEY');
         $keyAuth->save();
 
-        $auth->credentials()->associate($keyAuth);
+        $auth->credentials()->associate($accountAuth);
         $auth->save();
         $host->auth()->associate($auth);
         $host->save();
         $firstAction->host()->associate($host);
 
         $firstAction->save();
-        $firstAction->addCommand('npm install');
-        $firstAction->addCommand('npm run build');
+        $firstAction->addCommand('touch testing');
+        $firstAction->addCommand('ls');
 
         $secondAction = new Action();
         $secondAction->save();

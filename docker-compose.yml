@@ -1,5 +1,5 @@
 php:
-  image: registry.noprobe.co.uk/nginx-phpfpm
+  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
   ports:
     - "9000:80"
   volumes:
@@ -7,6 +7,7 @@ php:
     - .docker/nginx/sites-enabled:/etc/nginx/sites-enabled
   links:
     - mysql:mysql
+    - ssh:ssh
 
 mysql:
   image: registry.noprobe.co.uk/mariadb
@@ -16,35 +17,41 @@ mysql:
     - .docker/db/data:/var/lib/mysql
 
 cron:
-  image: registry.noprobe.co.uk/nginx-phpfpm
+  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
   volumes_from:
     - php
   links:
     - mysql:mysql
+    - ssh:ssh
   command:
     - "/var/www/scripts/cron.py"
 
 queue_runner_default:
-  image: registry.noprobe.co.uk/nginx-phpfpm
+  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
   volumes_from:
     - php
   links:
     - mysql:mysql
+    - ssh:ssh
   command: /var/www/scripts/queue-runner.sh default
 
 queue_runner_actions_1:
-  image: registry.noprobe.co.uk/nginx-phpfpm
+  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
   volumes_from:
     - php
   links:
     - mysql:mysql
+    - ssh:ssh
   command: /var/www/scripts/queue-runner.sh actions
 
 queue_runner_notifications_1:
-  image: registry.noprobe.co.uk/nginx-phpfpm
+  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
   volumes_from:
     - php
   links:
     - mysql:mysql
+    - ssh:ssh
   command: /var/www/scripts/queue-runner.sh notifications
 
+ssh:
+  image: registry.noprobe.co.uk/sshd:latest
