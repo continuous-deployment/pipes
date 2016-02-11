@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stream;
 use App\Models\Project;
 use App\Pipeline\Pipeline;
 use App\Pipeline\Traveler\Traveler;
@@ -61,9 +62,14 @@ class HookController extends Controller
         $conditions = $project->conditions;
         foreach ($conditions as $condition) {
             $pipeline = new Pipeline();
+            $stream = new Stream();
+            $stream->project()->save($project);
+            $stream->pipeable()->associate($condition);
+            $stream->save();
+
             $pipeline
                 ->send($traveler)
-                ->startWithModel($condition);
+                ->flow($stream);
         }
     }
 }

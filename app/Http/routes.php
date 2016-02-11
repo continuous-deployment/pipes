@@ -1,5 +1,7 @@
 <?php
 use App\Api\GitLab\GitLabManager;
+use App\Models\Stream;
+use App\Models\Project;
 use App\Models\Condition;
 use App\Pipeline\Pipeline;
 use App\Pipeline\Traveler\Traveler;
@@ -18,19 +20,27 @@ use App\Pipeline\Traveler\Traveler;
 $app->get(
     '/',
     function () use ($app) {
-        /** @var \App\Models\Condition $condition */
-        $condition = Condition::find(1);
-        $traveler  = new Traveler();
-        $traveler->bag->give([
-            'event' => [
-                'type' => 'push',
-            ],
-        ]);
-        $pipeline  = new Pipeline();
+        /** @var \App\Models\Project $project */
+        $project = Project::find(1);
+        $conditions = $project->conditions;
+        foreach ($conditions as $condition) {
+            $pipeline = new Pipeline();
+            $stream = new Stream();
+            $stream->project()->associate($project);
+            $stream->pipeable()->associate($condition);
+            $stream->save();
 
-        $pipeline
-            ->send($traveler)
-            ->startWithModel($condition);
+            $traveler  = new Traveler($stream);
+            $traveler->bag->give([
+                'event' => [
+                    'type' => 'push'
+                ]
+            ]);
+
+            $pipeline
+                ->send($traveler)
+                ->flow($stream);
+        }
 
         return $app->welcome();
     }
