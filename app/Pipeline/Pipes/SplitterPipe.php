@@ -4,6 +4,7 @@ namespace App\Pipeline\Pipes;
 
 use App\Models\Splitter;
 use App\Pipeline\Pipe;
+use App\Pipeline\Pipes\Severity;
 use App\Pipeline\Traveler\Bag;
 use App\Pipeline\Traveler\Traveler;
 
@@ -41,6 +42,7 @@ class SplitterPipe extends Pipe
         foreach ($this->splitter->splits as $split) {
             $pipeables[] = $split->pipeable;
         }
+        $this->log(Severity::OK, 'Successfully processed splitter');
 
         return $pipeables;
     }
