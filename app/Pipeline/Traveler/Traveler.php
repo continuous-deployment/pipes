@@ -66,6 +66,7 @@ class Traveler implements ShouldQueue, SelfHandling
      */
     public function travel(Pipe $pipe)
     {
+        $pipe->setStream($this->progress->stream);
         $this->progress->startOfPipe($this, $pipe);
         $models = $pipe->flowThrough($this->bag);
 
