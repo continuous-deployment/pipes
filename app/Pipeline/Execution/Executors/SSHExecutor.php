@@ -4,6 +4,9 @@ namespace App\Pipeline\Execution\Executors;
 
 use App\Models\Action;
 use App\Pipeline\Execution\Executor;
+use Ssh\Session;
+use Ssh\Configuration;
+use Ssh\Authentication\Password;
 
 class SSHExecutor extends Executor
 {
@@ -35,11 +38,19 @@ class SSHExecutor extends Executor
         }
 
         $commands = $action->commands;
-        $session = $this->getSSHSession($auth);
 
-        // Actually do the processing for SSH
-        // dd($auth, $commands, $session);
-        //
+        $configuration = new Configuration($action->host->host);
+        $session = $this->getSSHSession($auth, $configuration);
+        $exec = $session->getExec();
+
+        $commandOutputs = [];
+        foreach ($commands as $command) {
+            $commandOutputs[] = $exec->run($command->command);
+        }
+        foreach ($commandOutputs as $output) {
+            \Log::info($output);
+        }
+
         return true;
     }
 
@@ -47,13 +58,18 @@ class SSHExecutor extends Executor
      * Gets the SSH session using the auth given
      *
      * @param \App\Models\Auth $auth Auth model
+     * @param \Ssh\Configuration $configuration SSH configuration object
      */
-    protected function getSSHSession($auth)
+    protected function getSSHSession($auth, $configuration)
     {
         if ($auth->isKeyAuthentication()) {
-            // create SSH key connection and return
+            // TODO: create SSH key connection and return
         }
-
-        // return default way (username and password)
+        $authentication = new Password(
+            $auth->credentials->username,
+            $auth->credentials->password
+        );
+        $session = new Session($configuration, $authentication);
+        return $session;
     }
 }
