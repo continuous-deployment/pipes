@@ -7,7 +7,7 @@ use App\Pipeline\Pipe;
 use App\Pipeline\Traveler\Bag;
 use App\Pipeline\Traveler\Traveler;
 
-class SplitterPipe implements Pipe
+class SplitterPipe extends Pipe
 {
     /**
      * Splitter model

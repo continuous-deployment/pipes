@@ -6,7 +6,7 @@ use App\Models\Action;
 use App\Pipeline\Pipe;
 use App\Pipeline\Traveler\Bag;
 
-class ActionPipe implements Pipe
+class ActionPipe extends Pipe
 {
     /**
      * Action model

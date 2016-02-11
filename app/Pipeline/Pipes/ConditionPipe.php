@@ -6,7 +6,7 @@ use App\Models\Condition;
 use App\Pipeline\Pipe;
 use App\Pipeline\Traveler\Bag;
 
-class ConditionPipe implements Pipe
+class ConditionPipe extends Pipe
 {
     /**
      * Condition model

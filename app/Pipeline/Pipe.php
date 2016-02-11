@@ -4,7 +4,7 @@ namespace App\Pipeline;
 
 use App\Pipeline\Traveler\Bag;
 
-interface Pipe
+abstract class Pipe
 {
     /**
      * Handles the incoming traveler and perform necessary action
@@ -13,12 +13,12 @@ interface Pipe
      *
      * @return \Illuminate\Database\Eloquent\Model|array
      */
-    public function flowThrough(Bag $bag);
+    abstract public function flowThrough(Bag $bag);
 
     /**
      * Gets the model related to this pipe
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function getModel();
+    abstract public function getModel();
 }
