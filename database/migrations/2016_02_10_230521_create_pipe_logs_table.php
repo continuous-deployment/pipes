@@ -15,8 +15,8 @@ class CreatePipeLogsTable extends Migration
         Schema::create('pipe_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('severity');
-            $table->string('message');
-            $table->text('output');
+            $table->string('message')->nullable();
+            $table->text('output')->nullable();
             $table->integer('pipeable_id');
             $table->string('pipeable_type');
             $table->integer('stream_id');
