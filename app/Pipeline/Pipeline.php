@@ -2,8 +2,10 @@
 
 namespace App\Pipeline;
 
+use App\Models\Stream;
 use App\Pipeline\Traveler\Traveler;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 class Pipeline
 {
@@ -25,6 +27,25 @@ class Pipeline
         $this->traveler = $traveler;
 
         return $this;
+    }
+
+    /**
+     * Start the pipeline using the stream
+     *
+     * @param  Stream $stream Stream to start pipeline
+     * @return void
+     */
+    public function flow(Stream $stream)
+    {
+        $pipeable = $stream->pipeable;
+
+        if ($pipeable === null) {
+            throw new InvalidArgumentException(
+                'Stream does not having starting pipeable'
+            );
+        }
+
+        $this->startWithModel($pipeable);
     }
 
     /**
