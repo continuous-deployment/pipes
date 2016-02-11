@@ -2,14 +2,16 @@
 
 namespace App\Pipeline\Traveler;
 
+use App\Models\Stream;
+use App\Models\TravelerProgress;
 use App\Pipeline\Pipe;
 use App\Pipeline\PipeFactory;
 use App\Pipeline\PipeIdentifier;
+use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Database\ModelIdentifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Routing\DispatchesJobs;
-use Illuminate\Contracts\Bus\SelfHandling;
 
 class Traveler implements ShouldQueue, SelfHandling
 {
@@ -34,14 +36,25 @@ class Traveler implements ShouldQueue, SelfHandling
      *
      * @var \App\Pipeline\Pipe
      */
-    protected $nextPipe;
+    public $nextPipe;
+
+    /**
+     * Progress of the traveler
+     *
+     * @var \App\Models\TravelerProgress
+     */
+    public $progress;
 
     /**
      * Constructor
+     *
+     * @param Stream $stream Stream the traveler is on
      */
-    public function __construct()
+    public function __construct(Stream $stream)
     {
-        $this->bag = new Bag();
+        $this->bag      = new Bag();
+        $this->progress = new TravelerProgress();
+        $this->progress->stream()->associate($stream);
     }
 
     /**
@@ -53,6 +66,7 @@ class Traveler implements ShouldQueue, SelfHandling
      */
     public function travel(Pipe $pipe)
     {
+        $this->progress->startOfPipe($this, $pipe);
         $models = $pipe->flowThrough($this->bag);
 
         $pipes = $this->getPipes($models);
@@ -60,13 +74,16 @@ class Traveler implements ShouldQueue, SelfHandling
         if (count($pipes) === 0) {
             // END OF THE LINE
             \Log::info('PIPELINE FINISHED');
+            $this->progress->endOfPipeline($this);
 
             return;
         }
 
         $this->previousPipes[] = $pipe;
+        $this->nextPipe = null;
 
         foreach ($pipes as $pipe) {
+            $this->progress->endOfPipe($this, $pipe);
             $this->queueTravel($pipe);
         }
     }
@@ -123,7 +140,7 @@ class Traveler implements ShouldQueue, SelfHandling
     /**
      * Queues the travel
      *
-     * @param  Pipe $nextPipe Next pipe to process when handled by queue
+     * @param Pipe $nextPipe Next pipe to process when handled by queue
      *
      * @return void
      */
@@ -162,10 +179,16 @@ class Traveler implements ShouldQueue, SelfHandling
 
         $this->nextPipe = new PipeIdentifier($this->nextPipe);
 
+        $this->progress = new ModelIdentifier(
+            get_class($this->progress),
+            $this->progress->getKey()
+        );
+
         return [
             'previousPipes',
             'nextPipe',
-            'bag'
+            'bag',
+            'progress'
         ];
     }
 
@@ -186,5 +209,10 @@ class Traveler implements ShouldQueue, SelfHandling
         );
 
         $this->nextPipe = PipeFactory::makeFromPipeIdentifier($this->nextPipe);
+
+        $progressModelIdentifier = $this->progress;
+
+        $this->progress = (new $progressModelIdentifier->class)
+            ->findOrFail($progressModelIdentifier->id);
     }
 }
