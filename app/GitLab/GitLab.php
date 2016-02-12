@@ -142,7 +142,7 @@ class GitLab
         $privateToken = ''
     ) {
         $client = new GuzzleHttp\Client();
-        $url    = $this->host . '/' . $this->apiPath . $path;
+        $url    = $this->host . $this->apiPath . $path;
 
         $options = [];
 
