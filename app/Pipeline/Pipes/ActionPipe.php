@@ -37,9 +37,9 @@ class ActionPipe extends Pipe
         $result = $this->processAction($bag);
 
         if ($result) {
-            \Log::info('SUCCESSLY PROCESSED ACTION');
+            \Log::info('SUCCESSFULLY PROCESSED ACTION');
         } else {
-            \Log::info('UNSUCCESSLY PROCESSED ACTION');
+            \Log::info('UNSUCCESSFULLY PROCESSED ACTION');
         }
 
         $pipeable = $this->action->pipeable;
@@ -56,14 +56,24 @@ class ActionPipe extends Pipe
      */
     public function processAction(Bag $bag)
     {
-        $commands = $this->action->commands;
+        $type = $this->action->type;
 
-        foreach ($commands as $command) {
-            // TODO: Do actual processing.
-            \Log::info('PROCESSING ACTION: ' . $command->command);
+        /** @var \App\Pipeline\Execution\Manager $executorManager */
+        $executorManager = app('ExecutorManager');
+        $executor = $executorManager->getByType($type);
+
+        if ($executor === null) {
+            return false;
         }
 
-        return true && $bag;
+        $output = $executor->execute($this->action);
+        if ($output === false) {
+            return false;
+        }
+
+        $bag->give($output, 'ExecutorOutput');
+
+        return true;
     }
 
     /**

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property \App\Models\Host $host Host model related to this action
+ */
 class Action extends Model
 {
     /**
@@ -17,13 +20,23 @@ class Action extends Model
     ];
 
     /**
-     * All the conditions that will run if this condition passes
+     * The next pipe to take after this pipes is processed
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function pipeable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The host related to this action
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function host()
+    {
+        return $this->belongsTo(Host::class);
     }
 
     /**

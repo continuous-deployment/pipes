@@ -2,7 +2,11 @@
 
 use App\Models\Action;
 use App\Models\Project;
+use App\Models\Auth;
+use App\Models\AuthAccount;
+use App\Models\AuthKey;
 use App\Models\Condition;
+use App\Models\Host;
 use App\Models\Split;
 use App\Models\Splitter;
 use Illuminate\Database\Seeder;
@@ -43,10 +47,33 @@ class ExamplePipelineSeeder extends Seeder
         );
         $secondCondition->save();
 
-        $firstAction = new Action();
+        $firstAction = new Action([
+            'type' => 'ssh',
+        ]);
+        $host = new Host([
+            'host' => 'ssh',
+            'port' => '22',
+        ]);
+
+        $auth                  = new Auth();
+        $accountAuth           = new AuthAccount();
+        $accountAuth->username = getenv('SSH_USERNAME');
+        $accountAuth->password = getenv('SSH_PASSWORD');
+        $accountAuth->save();
+
+        $keyAuth           = new AuthKey();
+        $keyAuth->location = getenv('SSH_KEY');
+        $keyAuth->save();
+
+        $auth->credentials()->associate($accountAuth);
+        $auth->save();
+        $host->auth()->associate($auth);
+        $host->save();
+        $firstAction->host()->associate($host);
+
         $firstAction->save();
-        $firstAction->addCommand('npm install');
-        $firstAction->addCommand('npm run build');
+        $firstAction->addCommand('touch testing');
+        $firstAction->addCommand('ls');
 
         $secondAction = new Action();
         $secondAction->save();

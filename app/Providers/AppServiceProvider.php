@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Pipeline\Execution\Executors\SSHExecutor;
+use App\Pipeline\Execution\Manager;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('ExecutorManager', function ($app) {
+            return $app->make(Manager::class);
+        });
+
+        $manager = $this->app->make('ExecutorManager');
+        $manager->register(new SSHExecutor());
     }
 }
