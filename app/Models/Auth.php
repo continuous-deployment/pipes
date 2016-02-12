@@ -12,7 +12,7 @@ class Auth extends Model
      * @var array
      */
     protected $fillable = [
-        'type'
+        'type',
     ];
 
     /**
@@ -21,7 +21,7 @@ class Auth extends Model
      * @var array
      */
     protected $with = [
-        'credentials'
+        'credentials',
     ];
 
     /**
@@ -32,5 +32,34 @@ class Auth extends Model
     public function credentials()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Checks whether this auth uses a key as its authentication
+     *
+     * @return bool
+     */
+    public function isKeyAuthentication()
+    {
+        if ($this->credentials instanceof AuthKey) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+    * Checks whether this auth uses a username and password as its
+    * authentication
+    *
+    * @return bool
+    */
+    public function isAccountAuthentication()
+    {
+        if ($this->credentials instanceof AuthAccount) {
+            return true;
+        }
+
+        return false;
     }
 }
