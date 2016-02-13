@@ -14,6 +14,7 @@ RUN apk update && \
 EXPOSE 22
 
 COPY entry.sh /entry.sh
+RUN chmod +x /entry.sh
 COPY ssh_keys/ /root/.ssh/
 COPY ssh_keys/id_rsa.pub /root/.ssh/authorized_keys
 
