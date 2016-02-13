@@ -54,4 +54,4 @@ queue_runner_notifications_1:
   command: /var/www/scripts/queue-runner.sh notifications
 
 ssh:
-  image: registry.noprobe.co.uk/sshd:latest
+  build: .docker/builds/ssh
