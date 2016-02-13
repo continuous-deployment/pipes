@@ -7,6 +7,6 @@ before_install:
   - touch database/database.sqlite
 script:
   - docker exec -it pipes php composer.phar install
-  - docker exec -it pipes php artisan migrate
+  - docker exec -it pipes php artisan migrate:refresh --seed
 notifications:
   slack: pipes-team:XIqUP7e90C1pFSs4NWQkaQrQ
