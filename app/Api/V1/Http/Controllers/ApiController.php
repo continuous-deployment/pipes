@@ -21,7 +21,11 @@ class ApiController extends Controller
         $interpreter = new Interpreter();
         $interpreter->validatePipelineRequest($data);
 
-        dd($interpreter->getErrorMessages());
+        $messages = $interpreter->getErrorMessages();
+
+        if ($messages != []) {
+            return response()->json($messages, 400);
+        }
 
         return response()->json([
             'message' => 'Successfully added pipeline',
