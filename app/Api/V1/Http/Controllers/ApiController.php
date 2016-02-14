@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Http\Controllers;
 
+use App\Api\V1\Interpreter;
 use Laravel\Lumen\Routing\Controller;
 use Illuminate\Http\Request;
 
@@ -14,9 +15,13 @@ class ApiController extends Controller
      */
     public function pipeline(Request $request)
     {
-        $data = $request->getContent();
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData);
 
-        dd(json_decode($data));
+        $interpreter = new Interpreter();
+        $interpreter->validatePipelineRequest($data);
+
+        dd($interpreter->getErrorMessages());
 
         return response()->json([
             'message' => 'Successfully added pipeline',
