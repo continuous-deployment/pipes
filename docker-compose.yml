@@ -58,4 +58,4 @@ queue_runner_notifications_1:
 
 ssh:
   container_name: pipes_ssh
-  build: .docker/builds/ssh
+  image: registry.noprobe.co.uk/sshd
