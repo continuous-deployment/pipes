@@ -7,6 +7,8 @@ use App\Pipeline\Execution\Executor;
 use Ssh\Session;
 use Ssh\Configuration;
 use Ssh\Authentication\Password;
+use Ssh\Authentication\PublicKeyFile;
+use Illuminate\Filesystem\Filesystem as File;
 
 class SSHExecutor extends Executor
 {
@@ -63,13 +65,24 @@ class SSHExecutor extends Executor
     protected function getSSHSession($auth, $configuration)
     {
         if ($auth->isKeyAuthentication()) {
-            // TODO: create SSH key connection and return
+            $keyPath = 'storage/ssh/keys/' . rand(1000000, 9999999);
+            $keyPathPublic = $keyPath . '.pub';
+            $file = new File();
+            $file->put($keyPath, $auth->credentials->key);
+            $file->put($keyPathPublic, $auth->credentials->key_public);
+            $authentication = new PublicKeyFile(
+                $auth->credentials->username,
+                $keyPathPublic,
+                $keyPath
+            );
+        } else {
+            $authentication = new Password(
+                $auth->credentials->username,
+                $auth->credentials->password
+            );
         }
-        $authentication = new Password(
-            $auth->credentials->username,
-            $auth->credentials->password
-        );
         $session = new Session($configuration, $authentication);
+        $file->delete($keyPath, $keyPathPublic);
         return $session;
     }
 }

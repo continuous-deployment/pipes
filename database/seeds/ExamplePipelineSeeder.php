@@ -65,12 +65,13 @@ class ExamplePipelineSeeder extends Seeder
             $file = new File();
             $keyAuth           = new AuthKey();
             $keyAuth->key = $file->get('.docker/builds/ssh/ssh_keys/id_rsa');
+            $keyAuth->key_public = $file->get('.docker/builds/ssh/ssh_keys/id_rsa.pub');
             $keyAuth->save();
         } catch (Illuminate\Filesystem\FileNotFoundException $exception) {
             dump("SSH Key Not Found");
         }
 
-        $auth->credentials()->associate($accountAuth);
+        $auth->credentials()->associate($keyAuth);
         $auth->save();
         $host->auth()->associate($auth);
         $host->save();
