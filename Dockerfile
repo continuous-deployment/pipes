@@ -63,6 +63,6 @@ EXPOSE 80 9000
 
 WORKDIR /var/www
 ADD ./ /var/www
-RUN cp /var/www/.env.example /var/www/.env
+RUN cp /var/www/.env.example /var/www/.env && php composer.phar install
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor.d/nginx-supervisor.ini"]
