@@ -71,7 +71,7 @@ class ExamplePipelineSeeder extends Seeder
             dump("SSH Key Not Found");
         }
 
-        $auth->credentials()->associate($keyAuth);
+        $auth->credentials()->associate($accountAuth);
         $auth->save();
         $host->auth()->associate($auth);
         $host->save();
