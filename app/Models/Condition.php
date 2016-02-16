@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Condition extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'type',
+        'field',
+        'operator',
+        'value'
+    ];
+
+    /**
      * The relations to eager load on every query.
      *
      * @var array
