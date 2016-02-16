@@ -47,14 +47,14 @@ queue_runner_actions_1:
     - ssh:ssh
   command: /var/www/scripts/queue-runner.sh actions
 
-queue_runner_notifications_1:
-  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
-  volumes_from:
-    - php
-  links:
-    - mysql:mysql
-    - ssh:ssh
-  command: /var/www/scripts/queue-runner.sh notifications
+#queue_runner_notifications_1:
+#  image: registry.noprobe.co.uk/nginx-phpfpm:ssh
+#  volumes_from:
+#    - php
+#  links:
+#    - mysql:mysql
+#    - ssh:ssh
+#  command: /var/www/scripts/queue-runner.sh notifications
 
 ssh:
   container_name: pipes_ssh
