@@ -19,7 +19,7 @@ class ApiController extends Controller
         $data = json_decode($jsonData);
 
         $interpreter = new Interpreter();
-        $interpreter->validatePipelineRequest($data);
+        $interpreter->parsePipelineRequest($data);
 
         $messages = $interpreter->getErrorMessages();
 
