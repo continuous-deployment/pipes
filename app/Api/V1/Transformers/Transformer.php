@@ -14,6 +14,21 @@ interface Transformer
     public function transform($data);
 
     /**
+     * Attaches a relationship to the model
+     *
+     * @param  String    $relationshipName  Name of relationship in request
+     * @param  Model     $model             Model that has the relationships
+     * @param  Model     $relationshipModel Model to associate
+     *
+     * @return Model
+     */
+    public function attachRelationship(
+        $relationshipName,
+        Model $model,
+        Model $relationshipModel
+    );
+
+    /**
      * Gets the next pipes in the data given
      *
      * @param  stdClass $data Data to extract pipes from

@@ -3,6 +3,9 @@
 namespace App\Api\V1\Transformers\Types;
 
 use App\Api\V1\Transformers\Transformer;
+use App\Models\Condition;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ConditionTransformer implements Transformer
 {
@@ -15,7 +18,50 @@ class ConditionTransformer implements Transformer
      */
     public function transform($data)
     {
+        $condition = new Condition();
 
+        if (isset($data->id)) {
+            try {
+                $condition = $condition->find($data->id);
+            } catch (ModelNotFoundException $exception) {
+                return null;
+            }
+        }
+
+        if (isset($data->attributes)) {
+            $condition->fill(
+                (array) $data->attributes
+            );
+        }
+
+        // $condition->save();
+
+        return $condition;
+    }
+
+    /**
+     * Attaches a relationship to the model
+     *
+     * @param  String    $relationshipName  Name of relationship in request
+     * @param  Model     $model             Model that has the relationships
+     * @param  Model     $relationshipModel Model to associate
+     *
+     * @return Model
+     */
+    public function attachRelationship(
+        $relationshipName,
+        Model $model,
+        Model $relationshipModel
+    ) {
+        if ($relationshipName === 'success') {
+            $model->successPipeable()->associate($relationshipModel);
+        }
+
+        if ($relationshipName === 'failure') {
+            $model->failurePipeable()->associate($relationshipModel);
+        }
+
+        return $model;
     }
 
     /**
