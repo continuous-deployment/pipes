@@ -71,11 +71,25 @@ class Interpreter
         $relationships = $transformer->getNextPipesFromData($data);
 
         foreach ($relationships as $relationshipName => $relationshipData) {
-            $relatedModel = $this->parseData($relationshipData);
+            $relationshipIsArray = true;
+
+            if (!is_array($relationshipData)) {
+                $relationshipIsArray = false;
+                $relationshipData = [$relationshipData];
+            }
+
+            $relationshipData = array_map(function ($data) {
+                return $this->parseData($data);
+            }, $relationshipData);
+
+            if ($relationshipIsArray === false) {
+                $relationshipData = array_pop($relationshipData);
+            }
+
             $transformer->attachRelationship(
                 $relationshipName,
                 $model,
-                $relatedModel
+                $relationshipData
             );
         }
 
