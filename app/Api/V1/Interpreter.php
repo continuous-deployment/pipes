@@ -2,12 +2,18 @@
 
 namespace App\Api\V1;
 
+use App\Api\V1\Transformers\Validators\PipelineValidator;
 use App\Api\V1\Transformers\Factory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\MessageBag;
 
 class Interpreter
 {
+    /**
+     * Validator for the pipeline
+     *
+     * @var \App\Api\V1\Transformers\Validators\PipelineValidator
+     */
+    protected $validator;
+
     /**
      * Factory to create transformers and validators
      *
@@ -16,204 +22,77 @@ class Interpreter
     protected $factory;
 
     /**
-     * Error messages of the interpreter
-     *
-     * @var array
-     */
-    protected $errorMessages = [];
-
-    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->validator = new PipelineValidator();
         $this->factory = new Factory();
     }
 
     /**
-     * Add error messages to the current array of error messages
-     *
-     * @param string $key     Key to store messages against
-     * @param array $messages Messages to store
-     *
-     * @return void
-     */
-    protected function addErrorMessage($key, $messages)
-    {
-        $messagesKey = $key . '.errors';
-
-        if ($key == null) {
-            $messagesKey = 'errors';
-        }
-
-        $this->errorMessages = Arr::add(
-            $this->errorMessages,
-            $messagesKey,
-            $messages
-        );
-    }
-
-    /**
-     * Retrieves the currently set errorMessages.
+     * Retrieves the error messages from the validator and transformers
      *
      * @return array
      */
     public function getErrorMessages()
     {
-        return $this->errorMessages;
+        return $this->validator->getErrorMessages();
     }
 
     /**
      * Parses a pipeline request
      *
-     * @param  stdClass $data Data to interpret
+     * @param stdClass $data Data to interpret
      *
      * @return bool
      */
     public function parsePipelineRequest($data)
     {
-        if (!isset($data->type)) {
-            $this->errorMessages['pipeline'] =
-                'The starting pipe must have a type.';
-
+        if (!$this->validator->validate($data)) {
             return false;
         }
 
-        if (!$this->validatePipelineRequest($data)) {
-            return false;
-        }
+        $this->parseData($data);
 
         return true;
     }
 
     /**
-     * Validates the pipeline request
+     * Parses the data of the request
      *
-     * @param  stdClass $data Data to interpret
-     * @param  string   $key  Key to add the errors to
-     *
-     * @return bool
+     * @param stdClass $data Data sent by the user
      */
-    public function validatePipelineRequest($data, $key = '')
+    protected function parseData($data)
     {
-        if ($data === null) {
-            $this->addErrorMessage(
-                $key,
-                ['Unable to parse request data.']
-            );
-
-            return false;
-        }
-
-        $passes = true;
-
-        if (!isset($data->type)) {
-            $this->addErrorMessage(
-                $key,
-                ['Pipe must have a type.']
-            );
-
-            return false;
-        }
-
-        $validator = $this->factory->makeValidator($data->type);
-
-        if ($validator === null) {
-            $this->addErrorMessage(
-                $key,
-                ['Validator for ' . $data->type . ' does not exist.']
-            );
-
-            return false;
-        }
-
-        $validator->setData($data);
-
-        if ($validator->fails()) {
-            $this->addErrorMessage(
-                $key,
-                $validator->getErrorMessages()->toArray()
-            );
-
-            return false;
-        }
-
-        $passes = $this->validateRelationships($data, $key);
-
-        return $passes;
-    }
-
-    /**
-     * Validate the relationships of the given data
-     *
-     * @param mixed $data Data to validate
-     * @param string $key Key to store any error messages against
-     *
-     * @return bool
-     */
-    protected function validateRelationships($data, $key)
-    {
-        $passes = true;
-
-        $transformer = $this->factory->make($data->type);
-
-        if ($transformer === null) {
-            $this->addErrorMessage(
-                $key,
-                ['Transformer for ' . $data->type . ' does not exist.']
-            );
-
-            return false;
-        }
-
+        $type = $data->type;
+        $transformer = $this->factory->make($type);
+        $model = $transformer->transform($data);
         $relationships = $transformer->getNextPipesFromData($data);
 
-        foreach ($relationships as $relationshipName => $relationship) {
-            $messagesKey = $relationshipName;
+        foreach ($relationships as $relationshipName => $relationshipData) {
+            $relationshipIsArray = true;
 
-            if ($key != '') {
-                $messagesKey = $key . '.' . $messagesKey;
+            if (!is_array($relationshipData)) {
+                $relationshipIsArray = false;
+                $relationshipData = [$relationshipData];
             }
 
-            if (is_array($relationship)) {
-                foreach ($relationship as $key => $item) {
-                    $messagesKey = $messagesKey . '.' . $key;
+            $relationshipData = array_map(function ($data) {
+                return $this->parseData($data);
+            }, $relationshipData);
 
-                    if (!$this->validateSingleRelationshipItem(
-                        $item,
-                        $messagesKey
-                    )) {
-                        $passes = false;
-                    }
-                }
-
-                continue;
+            if ($relationshipIsArray === false) {
+                $relationshipData = array_pop($relationshipData);
             }
 
-            $this->validateSingleRelationshipItem($relationship, $messagesKey);
+            $transformer->attachRelationship(
+                $relationshipName,
+                $model,
+                $relationshipData
+            );
         }
 
-        return $passes;
-    }
-
-
-    /**
-     * Validate relationship data
-     *
-     * @param mixed $item        Item to validate
-     * @param string $messagesKey The key to use when storing error messages
-     *
-     * @return bool
-     */
-    protected function validateSingleRelationshipItem($item, $messagesKey)
-    {
-        $result = $this->validatePipelineRequest(
-            $item,
-            $messagesKey
-        );
-
-        if (!$result) {
-            return false;
-        }
+        return $model;
     }
 }
