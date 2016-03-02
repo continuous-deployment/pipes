@@ -4,10 +4,8 @@ namespace App\Pipeline\Execution\Executors;
 
 use App\Models\Action;
 use App\Pipeline\Execution\Executor;
-use Ssh\Session;
-use Ssh\Configuration;
-use Ssh\Authentication\Password;
-use Ssh\Authentication\PublicKeyFile;
+use phpseclib\Crypt\RSA;
+use phpseclib\Net\SSH2;
 use Illuminate\Filesystem\Filesystem as File;
 
 class SSHExecutor extends Executor
@@ -41,13 +39,10 @@ class SSHExecutor extends Executor
 
         $commands = $action->commands;
 
-        $configuration = new Configuration($action->host->host);
-        $session = $this->getSSHSession($auth, $configuration);
-        $exec = $session->getExec();
-
+        $session = $this->getSSHSession($auth, $action->host->host);
         $commandOutputs = [];
         foreach ($commands as $command) {
-            $commandOutputs[] = $exec->run($command->command);
+            $commandOutputs[] = $session->exec($command->command);
         }
         foreach ($commandOutputs as $output) {
             \Log::info($output);
@@ -62,27 +57,23 @@ class SSHExecutor extends Executor
      * @param \App\Models\Auth $auth Auth model
      * @param \Ssh\Configuration $configuration SSH configuration object
      */
-    protected function getSSHSession($auth, $configuration)
+    protected function getSSHSession($auth, $host)
     {
+        $session = new SSH2($host);
         if ($auth->isKeyAuthentication()) {
-            $keyPath = 'storage/ssh/keys/' . rand(1000000, 9999999);
-            $keyPathPublic = $keyPath . '.pub';
-            $file = new File();
-            $file->put($keyPath, $auth->credentials->key);
-            $file->put($keyPathPublic, $auth->credentials->key_public);
-            $authentication = new PublicKeyFile(
-                $auth->credentials->username,
-                $keyPathPublic,
-                $keyPath
-            );
+            $key = new RSA();
+            $key->loadKey($auth->credentials->key);
+            if (!$session ->login($auth->credentials->username, $key)) {
+                \log::error('Login Failed');
+            }
         } else {
-            $authentication = new Password(
+            if (!$session->login(
                 $auth->credentials->username,
                 $auth->credentials->password
-            );
+            )) {
+                \log::error('Login Failed');
+            }
         }
-        $session = new Session($configuration, $authentication);
-        $file->delete($keyPath, $keyPathPublic);
         return $session;
     }
 }

@@ -64,6 +64,7 @@ class ExamplePipelineSeeder extends Seeder
         try {
             $file = new File();
             $keyAuth           = new AuthKey();
+            $keyAuth->username = 'root';
             $keyAuth->key = $file->get('.docker/builds/ssh/ssh_keys/id_rsa');
             $keyAuth->key_public = $file->get('.docker/builds/ssh/ssh_keys/id_rsa.pub');
             $keyAuth->save();
@@ -71,7 +72,7 @@ class ExamplePipelineSeeder extends Seeder
             dump("SSH Key Not Found");
         }
 
-        $auth->credentials()->associate($accountAuth);
+        $auth->credentials()->associate($keyAuth);
         $auth->save();
         $host->auth()->associate($auth);
         $host->save();
