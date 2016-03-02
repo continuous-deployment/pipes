@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Action;
+use App\Models\Project;
 use App\Models\Auth;
 use App\Models\AuthAccount;
 use App\Models\AuthKey;
@@ -95,5 +96,14 @@ class ExamplePipelineSeeder extends Seeder
         $splitter->splits()->save($secondSplit);
 
         $firstCondition->successPipeable()->associate($splitter)->save();
+
+        $project = new Project();
+        $project->name = 'example';
+        $project->group = 'exampleGroup';
+        $project->url = 'http://localhost/exampleGroup/example';
+        $project->project_id = 2;
+        $project->save();
+
+        $project->conditions()->save($firstCondition);
     }
 }

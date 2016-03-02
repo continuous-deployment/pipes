@@ -107,6 +107,10 @@ class HookRegister
     {
         $url  = $this->getHookCatchUrl($hostId);
         $path = str_replace(['http://:', 'https://:'], '', $url);
+        if (env('PIPES_URL') === null) {
+            throw new \Exception('PIPES_URL is not set in the env file');
+        }
+
         $url  = env('PIPES_URL') . $path;
 
         return $url;

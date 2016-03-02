@@ -2,10 +2,20 @@
 
 namespace App\Pipeline;
 
+use App\Models\PipeLog;
+use App\Models\Stream;
+use App\Pipeline\Pipes\Severity;
 use App\Pipeline\Traveler\Bag;
 
-interface Pipe
+abstract class Pipe
 {
+    /**
+     * Current stream the pipe is on
+     *
+     * @var \App\Models\Stream
+     */
+    protected $stream;
+
     /**
      * Handles the incoming traveler and perform necessary action
      *
@@ -13,12 +23,47 @@ interface Pipe
      *
      * @return \Illuminate\Database\Eloquent\Model|array
      */
-    public function flowThrough(Bag $bag);
+    abstract public function flowThrough(Bag $bag);
 
     /**
      * Gets the model related to this pipe
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function getModel();
+    abstract public function getModel();
+
+    /**
+     * Sets the stream this pipe is on
+     *
+     * @param  Stream $stream
+     * @return self
+     */
+    public function setStream(Stream $stream)
+    {
+        $this->stream = $stream;
+
+        return $this;
+    }
+
+    /**
+     * Log what this pipe has done
+     *
+     * @param integer $severity The severity of the log
+     * @param string  $message  Title/message of the log
+     * @param string  $output   Any output of the pipe
+     *
+     * @return void
+     */
+    public function log($severity, $message = null, $output = null)
+    {
+        $pipeLog = new PipeLog();
+
+        $pipeLog->severity = $severity;
+        $pipeLog->message  = $message;
+        $pipeLog->output   = $output;
+        $pipeLog->stream()->associate($this->stream);
+        $pipeLog->pipeable()->associate($this->getModel());
+
+        $pipeLog->save();
+    }
 }

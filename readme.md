@@ -1,6 +1,7 @@
 # Pipes #
 
-![travis build badge](https://travis-ci.org/datkinson/pipes.svg?branch=master)
+[![travis build badge](https://travis-ci.org/datkinson/pipes.svg?branch=master)](https://travis-ci.org/datkinson/pipes)
+[![Code Climate](https://codeclimate.com/github/datkinson/pipes/badges/gpa.svg)](https://codeclimate.com/github/datkinson/pipes)
 
 ### Installation via docker ###
 

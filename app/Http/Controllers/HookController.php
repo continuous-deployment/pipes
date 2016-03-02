@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stream;
 use App\Models\Project;
 use App\Pipeline\Pipeline;
 use App\Pipeline\Traveler\Traveler;
@@ -32,15 +33,12 @@ class HookController extends Controller
             ];
         }
 
-        $traveler = new Traveler();
-        $traveler->bag->give($result);
+
 
         if (isset($result['project'])
             && $result['project'] instanceof Project
         ) {
-            /** @var \App\Models\Project $project */
-            $project = $result['project'];
-            $this->processProject($project, $traveler);
+            $this->processProject($result);
         }
 
         return [
@@ -51,19 +49,27 @@ class HookController extends Controller
     /**
      * Processes the project to send
      *
-     * @param Project  $project  Project model
-     * @param Traveler $traveler Traveler to send down pipeline
+     * @param array $result Result from the catchers
      *
      * @return void
      */
-    protected function processProject($project, $traveler)
+    protected function processProject($result)
     {
+        /** @var \App\Models\Project $project */
+        $project = $result['project'];
         $conditions = $project->conditions;
         foreach ($conditions as $condition) {
             $pipeline = new Pipeline();
+            $stream = new Stream();
+            $stream->project()->associate($project);
+            $stream->pipeable()->associate($condition);
+            $stream->save();
+            $traveler = new Traveler($stream);
+            $traveler->bag->give($result);
+
             $pipeline
                 ->send($traveler)
-                ->startWithModel($condition);
+                ->flow($stream);
         }
     }
 }

@@ -4,9 +4,10 @@ namespace App\Pipeline\Pipes;
 
 use App\Models\Condition;
 use App\Pipeline\Pipe;
+use App\Pipeline\Pipes\Severity;
 use App\Pipeline\Traveler\Bag;
 
-class ConditionPipe implements Pipe
+class ConditionPipe extends Pipe
 {
     /**
      * Condition model
@@ -35,9 +36,11 @@ class ConditionPipe implements Pipe
     public function flowThrough(Bag $bag)
     {
         if ($this->runCondition($bag)) {
+            $this->log(Severity::OK, 'Condition evaluated to true');
             return $this->condition->success_pipeable;
         }
 
+        $this->log(Severity::OK, 'Condition evaluated to false');
         return $this->condition->failure_pipeable;
     }
 
