@@ -14,7 +14,9 @@ class CreateAuthKeysTable extends Migration
     {
         Schema::create('auth_keys', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('location');
+            $table->string('username');
+            $table->text('key');
+            $table->text('key_public');
             $table->timestamps();
         });
     }

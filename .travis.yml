@@ -1,12 +1,18 @@
 sudo: required
 services:
   - docker
+env:
+  DOCKER_COMPOSE_VERSION: 1.4.2
+
 before_install:
-  - docker run -it -d -v `pwd`:/var/www --name=pipes registry.noprobe.co.uk/nginx-phpfpm:ssh
-  - cp .env.testing .env
-  - touch database/database.sqlite
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d
+  - cp .env.docker .env
 script:
-  - docker exec -it pipes php composer.phar install --prefer-source --no-interaction
-  - docker exec -it pipes php artisan migrate
+  - docker exec -it pipes_php php composer.phar install --prefer-source --no-interaction
+  - docker exec -it pipes_php php artisan migrate:refresh --seed
 notifications:
   slack: pipes-team:XIqUP7e90C1pFSs4NWQkaQrQ

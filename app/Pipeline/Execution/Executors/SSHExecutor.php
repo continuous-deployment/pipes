@@ -4,9 +4,9 @@ namespace App\Pipeline\Execution\Executors;
 
 use App\Models\Action;
 use App\Pipeline\Execution\Executor;
-use Ssh\Session;
-use Ssh\Configuration;
-use Ssh\Authentication\Password;
+use phpseclib\Crypt\RSA;
+use phpseclib\Net\SSH2;
+use Illuminate\Filesystem\Filesystem as File;
 
 class SSHExecutor extends Executor
 {
@@ -39,13 +39,10 @@ class SSHExecutor extends Executor
 
         $commands = $action->commands;
 
-        $configuration = new Configuration($action->host->host);
-        $session = $this->getSSHSession($auth, $configuration);
-        $exec = $session->getExec();
-
+        $session = $this->getSSHSession($auth, $action->host->host);
         $commandOutputs = [];
         foreach ($commands as $command) {
-            $commandOutputs[] = $exec->run($command->command);
+            $commandOutputs[] = $session->exec($command->command);
         }
         foreach ($commandOutputs as $output) {
             \Log::info($output);
@@ -60,16 +57,23 @@ class SSHExecutor extends Executor
      * @param \App\Models\Auth $auth Auth model
      * @param \Ssh\Configuration $configuration SSH configuration object
      */
-    protected function getSSHSession($auth, $configuration)
+    protected function getSSHSession($auth, $host)
     {
+        $session = new SSH2($host);
         if ($auth->isKeyAuthentication()) {
-            // TODO: create SSH key connection and return
+            $key = new RSA();
+            $key->loadKey($auth->credentials->key);
+            if (!$session ->login($auth->credentials->username, $key)) {
+                \log::error('Login Failed');
+            }
+        } else {
+            if (!$session->login(
+                $auth->credentials->username,
+                $auth->credentials->password
+            )) {
+                \log::error('Login Failed');
+            }
         }
-        $authentication = new Password(
-            $auth->credentials->username,
-            $auth->credentials->password
-        );
-        $session = new Session($configuration, $authentication);
         return $session;
     }
 }

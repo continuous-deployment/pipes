@@ -10,6 +10,7 @@ use App\Models\Host;
 use App\Models\Split;
 use App\Models\Splitter;
 use Illuminate\Database\Seeder;
+use Illuminate\Filesystem\Filesystem as File;
 
 class ExamplePipelineSeeder extends Seeder
 {
@@ -61,11 +62,18 @@ class ExamplePipelineSeeder extends Seeder
         $accountAuth->password = getenv('SSH_PASSWORD');
         $accountAuth->save();
 
-        $keyAuth           = new AuthKey();
-        $keyAuth->location = getenv('SSH_KEY');
-        $keyAuth->save();
+        try {
+            $file = new File();
+            $keyAuth           = new AuthKey();
+            $keyAuth->username = 'root';
+            $keyAuth->key = $file->get('.docker/builds/ssh/ssh_keys/id_rsa');
+            $keyAuth->key_public = $file->get('.docker/builds/ssh/ssh_keys/id_rsa.pub');
+            $keyAuth->save();
+        } catch (Illuminate\Filesystem\FileNotFoundException $exception) {
+            dump("SSH Key Not Found");
+        }
 
-        $auth->credentials()->associate($accountAuth);
+        $auth->credentials()->associate($keyAuth);
         $auth->save();
         $host->auth()->associate($auth);
         $host->save();
