@@ -28,6 +28,12 @@
             "tests/"
         ]
     },
+    "scripts": {
+        "docs": [
+            "php sami.phar parse sami-config.php",
+            "php sami.phar update sami-config.php"
+        ]
+    },
     "config": {
         "preferred-install": "dist"
     }

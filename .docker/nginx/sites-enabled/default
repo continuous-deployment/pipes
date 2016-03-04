@@ -1,13 +1,16 @@
 server {
   server_name laravel-docker.dev;
   root        /var/www/public;
-  index       index.php;
+  index       index.php index.html index.xhtml;
 
   client_max_body_size 100M;
   fastcgi_read_timeout 1800;
 
   location / {
     try_files $uri $uri/ /index.php$query_string;
+  }
+  location /docs {
+    autoindex on;
   }
 
   location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {

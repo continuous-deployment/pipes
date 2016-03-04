@@ -45,3 +45,13 @@ This will scale the group of containers up to 15 runners.
 The reverse setting the scale back down to 1 will remove the newer containers.
 
 You may scale up and down as much as you like.
+
+
+### Documentation ###
+
+You can generate the documentation but running the command:
+```bash
+php compose.phar docs
+```
+
+Then going to the ```/docs``` route of the application
