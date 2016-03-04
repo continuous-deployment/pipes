@@ -28,6 +28,9 @@
             "tests/"
         ]
     },
+    "scripts": {
+        "docs": "php ./phpDocumentor.phar -d app -t public/docs"
+    },
     "config": {
         "preferred-install": "dist"
     }
