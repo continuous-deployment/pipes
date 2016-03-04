@@ -45,3 +45,20 @@ This will scale the group of containers up to 15 runners.
 The reverse setting the scale back down to 1 will remove the newer containers.
 
 You may scale up and down as much as you like.
+
+
+### Documentation ###
+
+You an build the documentation by running the command:
+```bash
+doxygen Doxyfile
+```
+
+You will need the doxygen and graphviz installed.
+
+Alternatively you can run:
+```bash
+docker run --rm -it -v `pwd`:/src hourd/doxygen
+```
+
+You can then go to your application path ```/docs``` in a browser to access the documentation.
