@@ -18,6 +18,7 @@ class Commit extends Model
         'timestamp',
         'author_name',
         'author_email',
+        'branch',
         'project_id',
     ];
 }
