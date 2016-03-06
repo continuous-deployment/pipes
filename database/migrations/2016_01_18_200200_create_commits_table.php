@@ -20,6 +20,7 @@ class CreateCommitsTable extends Migration
             $table->string('author_name');
             $table->string('author_email');
             $table->string('project_id')->nullable();
+            $table->string('branch');
             $table->string('url');
             $table->timestamps();
         });
