@@ -4,6 +4,7 @@ namespace App\GitLab\Hooks;
 
 use App\GitLab\Hooks\Events\ProjectCreateEvent;
 use App\GitLab\Hooks\Events\PushEvent;
+use App\GitLab\Hooks\Events\CIBuildEvent;
 use App\Hooks\Catcher;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,7 @@ class GitLabCatcher implements Catcher
     {
         $this->events[] = new ProjectCreateEvent();
         $this->events[] = new PushEvent();
+        $this->events[] = new CIBuildEvent();
     }
 
     /**
