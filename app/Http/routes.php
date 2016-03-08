@@ -20,8 +20,8 @@ use App\Pipeline\Traveler\Traveler;
 $app->get(
     '/',
     function () use ($app) {
-        /** @var \App\Models\Project $project */
-        return $app->welcome();
+        $message = str_replace('Lumen.', 'Pipes.', $app->welcome());
+        return $message;
     }
 );
 
