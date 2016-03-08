@@ -75,6 +75,7 @@ class ProjectsController extends Controller
 
     /**
      * Stores a new project.
+     * POST /api/v1/projects
      *
      * @param  Request $request Request that has been made.
      *
@@ -105,6 +106,7 @@ class ProjectsController extends Controller
 
     /**
      * Updates an existing project.
+     * PATCH /api/v1/projects/{projectId}
      *
      * @param  Request $request Request that has been made.
      *
