@@ -2,3 +2,6 @@ build:
   image: hourd/php
   commands:
     - php composer.phar install --prefer-source --no-interaction
+    - cp .env.testing .env
+    - php artisan migrate
+    - vendor/bin/phpunit
