@@ -21,27 +21,6 @@ $app->get(
     '/',
     function () use ($app) {
         /** @var \App\Models\Project $project */
-        $project = Project::find(1);
-        $conditions = $project->conditions;
-        foreach ($conditions as $condition) {
-            $pipeline = new Pipeline();
-            $stream = new Stream();
-            $stream->project()->associate($project);
-            $stream->pipeable()->associate($condition);
-            $stream->save();
-
-            $traveler  = new Traveler($stream);
-            $traveler->bag->give([
-                'event' => [
-                    'type' => 'push'
-                ]
-            ]);
-
-            $pipeline
-                ->send($traveler)
-                ->flow($stream);
-        }
-
         return $app->welcome();
     }
 );
