@@ -36,4 +36,12 @@ $app->group([
             'uses' => 'ProjectsController@get'
         ]
     );
+
+    $app->post(
+        'store',
+        [
+            'as' => 'api.v1.projects.store',
+            'uses' => 'ProjectsController@store'
+        ]
+    );
 });
