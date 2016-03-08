@@ -104,6 +104,45 @@ class ProjectsController extends Controller
     }
 
     /**
+     * Updates an existing project.
+     *
+     * @param  Request $request Request that has been made.
+     *
+     * @return array
+     */
+    public function update(Request $request, $projectId)
+    {
+        $this->validate(
+            $request,
+            $this->rules
+        );
+
+        $data = $request->only([
+            'project_id',
+            'name',
+            'group',
+            'url'
+        ]);
+
+        $project = $this->model->find($projectId);
+
+        if ($project === null) {
+            return $this->buildFailedResponse(
+                'Could not find project with id of ' . $projectId
+            );
+        }
+
+        $project->fill($data);
+        $project->save();
+
+        return [
+            'status' => 'success',
+            'message' => 'Successfully created project.',
+            'resource' => $this->createJsonApiOutput($project)
+        ];
+    }
+
+    /**
      * Creates a Json Api output using the resource
      *
      * @param mixed $resource Resources to convert.
@@ -145,11 +184,23 @@ class ProjectsController extends Controller
      */
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
+        $message = 'Failed validation';
+
+        return $this->buildFailedResponse($message, $errors);
+    }
+
+    /**
+     * Builds a failed response.
+     *
+     * @param string $message Message to send.
+     * @param array  $errors  Any errors associated to the failure.
+     */
+    protected function buildFailedResponse($message, $errors = [])
+    {
         return new JsonResponse([
             'status' => 'failed',
-            'message' => 'Failed validation',
+            'message' => $message,
             'errors' => $errors
         ], 422);
-
     }
 }
