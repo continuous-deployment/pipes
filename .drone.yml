@@ -1,0 +1,8 @@
+build:
+  image: hourd/php
+  commands:
+    - php composer.phar install --prefer-source --no-interaction
+    - cp .env.testing .env
+    - touch database/database.sqlite
+    - php artisan migrate
+    - vendor/bin/phpunit
