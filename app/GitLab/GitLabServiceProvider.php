@@ -2,7 +2,7 @@
 
 namespace App\GitLab;
 
-use App\GitLab\Hooks\GitLabCatcher;
+use App\GitLab\Hooks\GitLabHandler;
 use Illuminate\Support\ServiceProvider;
 
 class GitLabServiceProvider extends ServiceProvider
@@ -14,10 +14,10 @@ class GitLabServiceProvider extends ServiceProvider
     */
     public function register()
     {
-        /** @var \App\Hooks\Pier $pier */
-        $pier = $this->app['Pier'];
-        $gitlabCatcher = new GitLabCatcher();
+        /** @var \App\Hooks\ServiceRouter $serviceRouter */
+        $serviceRouter = $this->app['ServiceRouter'];
+        $gitlabHandler = new GitLabHandler();
 
-        $pier->enrol($gitlabCatcher);
+        $serviceRouter->enrol($gitlabHandler);
     }
 }
