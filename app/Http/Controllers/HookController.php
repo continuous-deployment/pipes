@@ -12,6 +12,7 @@ class HookController extends Controller
 {
     /**
      * Handle incomming hooks.
+     *
      * @param Request $request Incomming request object
      * @param string  $appName Name of the application the hook came from
      *
@@ -19,9 +20,9 @@ class HookController extends Controller
      */
     public function recieve(Request $request, $appName)
     {
-        /** @var \App\Hooks\Pier $pier */
-        $pier   = app('Pier');
-        $result = $pier->sendRequestToCatcher($request, $appName);
+        /** @var \App\Hooks\ServiceRouter $serviceRouter */
+        $serviceRouter = app('ServiceRouter');
+        $result = $serviceRouter->route($request, $appName);
 
         if ($result === false) {
             \Log::error('Unable to handle request ' . $request->getUri());
@@ -33,10 +34,8 @@ class HookController extends Controller
             ];
         }
 
-
-
-        if (isset($result['project'])
-            && $result['project'] instanceof Project
+        if (isset($result['project']) &&
+            $result['project'] instanceof Project
         ) {
             $this->processProject($result);
         }

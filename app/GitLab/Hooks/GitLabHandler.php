@@ -2,12 +2,13 @@
 
 namespace App\GitLab\Hooks;
 
+use App\GitLab\Hooks\Events\CIBuildEvent;
 use App\GitLab\Hooks\Events\ProjectCreateEvent;
 use App\GitLab\Hooks\Events\PushEvent;
-use App\Hooks\Catcher;
+use App\Hooks\Handler;
 use Illuminate\Http\Request;
 
-class GitLabCatcher implements Catcher
+class GitLabHandler implements Handler
 {
     /**
      * Events this catcher can receive
@@ -30,10 +31,11 @@ class GitLabCatcher implements Catcher
     {
         $this->events[] = new ProjectCreateEvent();
         $this->events[] = new PushEvent();
+        $this->events[] = new CIBuildEvent();
     }
 
     /**
-     * Returns the name of the application the catcher is for
+     * Returns the name of the application the handler is for
      *
      * @return string
      */
@@ -43,23 +45,23 @@ class GitLabCatcher implements Catcher
     }
 
     /**
-     * Initial function to be called when a hooks comes in
+     * Will handle the request creating any new models needed.
      *
      * @param  Request $request The request object that was sent
      * @return void
      */
-    public function catchHook(Request $request)
+    public function handleRequest(Request $request)
     {
         return $this->chosenEvent->process($request);
     }
 
     /**
-     * A check to see if this catcher wants the received hook
+     * A check to see if this handler wants the received hook
      *
      * @param  Request $request The request object that was sent
      * @return boolean
      */
-    public function wantsHook(Request $request)
+    public function canHandleRequest(Request $request)
     {
         /** @var \App\Hooks\Event $event */
         foreach ($this->events as $event) {

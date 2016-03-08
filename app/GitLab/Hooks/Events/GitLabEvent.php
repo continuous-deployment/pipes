@@ -2,6 +2,9 @@
 
 namespace App\GitLab\Hooks\Events;
 
+use App\GitLab\Hooks\HookRegister;
+use App\Models\Commit;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 abstract class GitLabEvent
@@ -40,5 +43,92 @@ abstract class GitLabEvent
         $isCorrectEvent = $request->get($this->eventKey) == $this->eventValue;
 
         return $isCorrectEvent;
+    }
+
+    /**
+     * Gets the host id from the request.
+     *
+     * @param Request $request Request that has been sent.
+     *
+     * @return integer
+     */
+    protected function getHostIdFromRequest(Request $request)
+    {
+        $routeInfo  = $request->route();
+        $parameters = $routeInfo[2];
+        $hostId     = $parameters['hostId'];
+
+        return $hostId;
+    }
+
+    /**
+     * Creates a new commit.
+     *
+     * @param string  $commitHash  Unique commit hash.
+     * @param string  $message     Commit message.
+     * @param string  $url         Url of the commit.
+     * @param string  $timestamp   Timestamp of when the commit happened.
+     * @param string  $authorName  Commit authors name.
+     * @param string  $authorEmail Commit authors email.
+     * @param string  $branch      Branch the commit came from.
+     * @param Project $project     The project to store commit against.
+     *
+     * @return App\Models\Commit
+     */
+    protected function createCommit(
+        $commitHash,
+        $message,
+        $url,
+        $timestamp,
+        $authorName,
+        $authorEmail,
+        $branch,
+        Project $project
+    ) {
+        // Removing refs/heads/ from the start of the branch.
+        $branch = str_replace('refs/heads/', '', $branch);
+
+        $commit = (new Commit())->firstOrCreate(
+            [
+                'commit_id'    => $commitHash,
+                'message'      => $message,
+                'url'          => $url,
+                'timestamp'    => $timestamp,
+                'author_name'  => $authorName,
+                'author_email' => $authorEmail,
+                'branch'       => $branch,
+                'project_id'   => $project->project_id,
+            ]
+        );
+
+        return $commit;
+    }
+
+    /**
+     * Gets or create a project from the data given.
+     *
+     * @param string  $projectId        Id of the project on GitLab.
+     * @param string  $namespaceAndName The namespace and name of the project.
+     * @param integer $hostId           The hostId to associate to.
+     *
+     * @return array
+     */
+    protected function getProject($projectId, $namespaceAndName, $hostId)
+    {
+        $projectName = explode('/', $namespaceAndName);
+        $namespace   = trim($projectName[0]);
+        $name        = trim($projectName[1]);
+
+        $project = (new Project())->firstOrCreate([
+            'project_id' => $projectId,
+            'name'       => $name,
+            'group'      => $namespace,
+            'host_id'    => $hostId,
+        ]);
+
+        $register = new HookRegister();
+        $register->registerWithProjectId($projectId, $hostId);
+
+        return $project;
     }
 }
