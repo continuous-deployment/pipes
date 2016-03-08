@@ -28,4 +28,12 @@ $app->group([
             'uses' => 'ProjectsController@all'
         ]
     );
+
+    $app->get(
+        '{project_id}',
+        [
+            'as' => 'api.v1.project',
+            'uses' => 'ProjectsController@get'
+        ]
+    );
 });
