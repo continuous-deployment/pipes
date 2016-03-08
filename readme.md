@@ -1,7 +1,7 @@
 # Pipes #
 
 [![Build Status](https://travis-ci.org/continuous-deployment/pipes.svg?branch=master)](https://travis-ci.org/continuous-deployment/pipes)
-[![Code Climate](https://codeclimate.com/github/datkinson/pipes/badges/gpa.svg)](https://codeclimate.com/github/datkinson/pipes)
+[![Code Climate](https://codeclimate.com/github/continuous-deployment/pipes/badges/gpa.svg)](https://codeclimate.com/github/continuous-deployment/pipes)
 [![Build Status](https://drone.continuous-deployment.software/api/badges/continuous-deployment/pipes/status.svg)](https://drone.continuous-deployment.software/continuous-deployment/pipes)
 
 ### Installation via docker ###
