@@ -145,6 +145,32 @@ class ProjectsController extends Controller
     }
 
     /**
+     * Deletes the project using the given project id.
+     * DELETE /api/v1/projects/1/delete
+     *
+     * @param  integer $projectId Project id to delete.
+     *
+     * @return array
+     */
+    public function delete($projectId)
+    {
+        $project = $this->model->find($projectId);
+
+        if ($project === null) {
+            return $this->buildFailedResponse(
+                'Could not find project with id of ' . $projectId
+            );
+        }
+
+        $project->delete();
+
+        return [
+            'status' => 'success',
+            'message' => 'Successfully deleted project.'
+        ];
+    }
+
+    /**
      * Creates a Json Api output using the resource
      *
      * @param mixed $resource Resources to convert.
