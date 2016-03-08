@@ -1,5 +1,5 @@
 build:
-  image: php:5.6
+  image: hourd/php
   commands:
     - php composer.phar install --prefer-source --no-interaction
     - cp .env.testing .env
