@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ServiceRouter
 {
     /**
-     * Array of all the catchers registered to this pier
+     * Array of all the handlers registered to this router
      *
      * @var array
      */
