@@ -8,13 +8,16 @@ class HookRegister
 {
     /**
      * GitLabManager instance
+     *
      * @var GitLabManager
      */
     protected $gitlab;
 
     /**
      * Constructor
+     *
      * @param  GitLabManager $gitlab accepts a GitLabManager instance.
+     *
      * @return void
      */
     public function __construct(GitLabManager $gitlab = null)
@@ -28,8 +31,10 @@ class HookRegister
 
     /**
      * Register project hooks on GitLab
+     *
      * @param  string|integer $projectId The id of the project.
      * @param  string|integer $hostId    The host id for the GitLab
+     *
      * @return void
      */
     public function registerWithProjectId($projectId, $hostId)
@@ -58,6 +63,7 @@ class HookRegister
 
     /**
      * Register system hooks on all the gitlab instances
+     *
      * @return void
      */
     public function registerSystemHooksOnInstances()
