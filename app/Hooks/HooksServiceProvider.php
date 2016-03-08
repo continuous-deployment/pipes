@@ -13,7 +13,7 @@ class HooksServiceProvider extends ServiceProvider
     */
     public function register()
     {
-        $pier = new Pier();
-        $this->app->instance('Pier', $pier);
+        $serviceRouter = new ServiceRouter();
+        $this->app->instance('ServiceRouter', $serviceRouter);
     }
 }
