@@ -52,4 +52,12 @@ $app->group([
             'uses' => 'ProjectsController@update'
         ]
     );
+
+    $app->delete(
+        '{project_id}/delete',
+        [
+            'as' => 'api.v1.projects.delete',
+            'uses' => 'ProjectsController@delete'
+        ]
+    );
 });
