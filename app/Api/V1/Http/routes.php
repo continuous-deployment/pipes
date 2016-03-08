@@ -44,4 +44,12 @@ $app->group([
             'uses' => 'ProjectsController@store'
         ]
     );
+
+    $app->patch(
+        '{project_id}/update',
+        [
+            'as' => 'api.v1.projects.update',
+            'uses' => 'ProjectsController@update'
+        ]
+    );
 });
