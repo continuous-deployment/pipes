@@ -1,18 +1,16 @@
-sudo: required
-services:
-  - docker
-env:
-  DOCKER_COMPOSE_VERSION: 1.4.2
-
+language: php
+php:
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - hhvm
+  - nightly
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose up -d
-  - cp .env.docker .env
-script:
-  - docker exec -it pipes_php php composer.phar install --prefer-source --no-interaction
-  - docker exec -it pipes_php php artisan migrate:refresh --seed
+  - cp .env.testing .env
+  - touch database/database.sqlite
+install:
+  - php composer.phar install --prefer-source --no-interaction
+  - php artisan migrate
+script: phpunit
 notifications:
   slack: pipes-team:XIqUP7e90C1pFSs4NWQkaQrQ
