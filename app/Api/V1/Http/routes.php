@@ -6,7 +6,8 @@ if (!isset($app)) {
 
 $app->group([
     'namespace' => 'App\Api\V1\Http\Controllers',
-    'prefix' => 'api/v1'
+    'prefix' => 'api/v1',
+    'middleware' => 'cors'
 ], function (Laravel\Lumen\Application $app) {
     $app->post(
         'pipeline',
@@ -19,7 +20,8 @@ $app->group([
 
 $app->group([
     'namespace' => 'App\Api\V1\Http\Controllers',
-    'prefix' => 'api/v1/projects'
+    'prefix' => 'api/v1/projects',
+    'middleware' => 'cors'
 ], function (Laravel\Lumen\Application $app) {
     $app->get(
         '',
