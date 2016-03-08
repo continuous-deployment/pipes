@@ -16,4 +16,4 @@ docker run --rm -it -v `pwd`:/var/www hourd/php php composer.phar install --pref
 docker run --rm -it -v `pwd`:/var/www hourd/php php artisan migrate
 
 # Build the docker container
-docker build -t hourd/pipes .
+docker build -t continuousdeployment/pipes .
