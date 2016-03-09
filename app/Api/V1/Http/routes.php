@@ -83,4 +83,27 @@ $app->group([
             'uses' => 'HostsController@get'
         ]
     );
+    $app->post(
+        'store',
+        [
+            'as' => 'api.v1.hosts.store',
+            'uses' => 'HostsController@store'
+        ]
+    );
+
+    $app->patch(
+        '{host_id}/update',
+        [
+            'as' => 'api.v1.hosts.update',
+            'uses' => 'HostsController@update'
+        ]
+    );
+
+    $app->delete(
+        '{host_id}/delete',
+        [
+            'as' => 'api.v1.hosts.delete',
+            'uses' => 'HostsController@delete'
+        ]
+    );
 });

@@ -24,6 +24,16 @@ class HostsController extends Controller
     protected $model;
 
     /**
+     * Validation rules for hosts
+     *
+     * @var array
+     */
+    protected $rules = [
+        'host' => 'required|string',
+        'port' => 'required|integer'
+    ];
+
+    /**
      * Constructor.
      *
      * @param Host $host Empty host model.
@@ -59,6 +69,99 @@ class HostsController extends Controller
         $output = $this->createJsonApiOutput($host);
 
         return $output;
+    }
+
+    /**
+     * Stores a new host.
+     * POST /api/v1/hosts
+     *
+     * @param  Request $request Request that has been made.
+     *
+     * @return array
+     */
+    public function store(Request $request)
+    {
+        $this->validate(
+            $request,
+            $this->rules
+        );
+
+        $data = $request->only([
+            'host',
+            'port'
+        ]);
+
+        $host = $this->model->firstOrCreate($data);
+
+        return [
+            'status' => 'success',
+            'message' => 'Successfully created host.',
+            'resource' => $this->createJsonApiOutput($host)
+        ];
+    }
+
+    /**
+     * Updates an existing host.
+     * PATCH /api/v1/hosts/{hostId}
+     *
+     * @param  Request $request Request that has been made.
+     *
+     * @return array
+     */
+    public function update(Request $request, $hostId)
+    {
+        $this->validate(
+            $request,
+            $this->rules
+        );
+
+        $data = $request->only([
+            'host',
+            'port'
+        ]);
+
+        $host = $this->model->find($hostId);
+
+        if ($host === null) {
+            return $this->buildFailedResponse(
+                'Could not find host with id of ' . $hostId
+            );
+        }
+
+        $host->fill($data);
+        $host->save();
+
+        return [
+            'status' => 'success',
+            'message' => 'Successfully created host.',
+            'resource' => $this->createJsonApiOutput($host)
+        ];
+    }
+
+    /**
+     * Deletes the host using the given host id.
+     * DELETE /api/v1/hosts/1/delete
+     *
+     * @param  integer $hostId Host id to delete.
+     *
+     * @return array
+     */
+    public function delete($hostId)
+    {
+        $host = $this->model->find($hostId);
+
+        if ($host === null) {
+            return $this->buildFailedResponse(
+                'Could not find host with id of ' . $hostId
+            );
+        }
+
+        $host->delete();
+
+        return [
+            'status' => 'success',
+            'message' => 'Successfully deleted host.'
+        ];
     }
 
     /**
