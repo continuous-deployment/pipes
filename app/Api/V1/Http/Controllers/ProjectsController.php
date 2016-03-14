@@ -63,11 +63,16 @@ class ProjectsController extends Controller
      * Gets a single project.
      * GET /api/v1/projects/1
      *
+     * @param  integer $projectId Project id to get
+     *
      * @return array
      */
     public function get($projectId)
     {
-        $project = $this->model->find($projectId);
+        $project = $this->model
+            ->find($projectId)
+            ->with('conditions')
+            ->first();
         $output = $this->createJsonApiOutput($project);
 
         return $output;
