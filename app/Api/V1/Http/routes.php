@@ -12,8 +12,15 @@ $app->group([
     $app->post(
         'pipeline',
         [
+            'as'   => 'api.v1.pipeline.store',
+            'uses' => 'PipelineController@storePipeline',
+        ]
+    );
+    $app->get(
+        'pipeline/{conditionId}',
+        [
             'as'   => 'api.v1.pipeline',
-            'uses' => 'ApiController@pipeline',
+            'uses' => 'PipelineController@pipeline',
         ]
     );
 });
