@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Transformers;
+namespace Pipes\Api\V1\Transformers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

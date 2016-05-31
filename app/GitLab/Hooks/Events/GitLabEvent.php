@@ -1,10 +1,10 @@
 <?php
 
-namespace App\GitLab\Hooks\Events;
+namespace Pipes\GitLab\Hooks\Events;
 
-use App\GitLab\Hooks\HookRegister;
-use App\Models\Commit;
-use App\Models\Project;
+use Pipes\GitLab\Hooks\HookRegister;
+use Pipes\Models\Commit;
+use Pipes\Models\Project;
 use Illuminate\Http\Request;
 
 abstract class GitLabEvent
@@ -73,7 +73,7 @@ abstract class GitLabEvent
      * @param string  $branch      Branch the commit came from.
      * @param Project $project     The project to store commit against.
      *
-     * @return App\Models\Commit
+     * @return Pipes\Models\Commit
      */
     protected function createCommit(
         $commitHash,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Registrars;
+namespace Pipes\Console\Commands\Registrars;
 
 use Illuminate\Console\Command;
 

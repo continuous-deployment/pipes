@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Pipeline;
+namespace Pipes\Pipeline;
 
-use App\Models\PipeLog;
-use App\Models\Stream;
-use App\Pipeline\Pipes\Severity;
-use App\Pipeline\Traveler\Bag;
+use Pipes\Models\PipeLog;
+use Pipes\Models\Stream;
+use Pipes\Pipeline\Pipes\Severity;
+use Pipes\Pipeline\Traveler\Bag;
 
 abstract class Pipe
 {
     /**
      * Current stream the pipe is on
      *
-     * @var \App\Models\Stream
+     * @var \Pipes\Models\Stream
      */
     protected $stream;
 

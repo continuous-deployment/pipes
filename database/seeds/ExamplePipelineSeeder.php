@@ -1,14 +1,14 @@
 <?php
 
-use App\Models\Action;
-use App\Models\Project;
-use App\Models\Auth;
-use App\Models\AuthAccount;
-use App\Models\AuthKey;
-use App\Models\Condition;
-use App\Models\Host;
-use App\Models\Split;
-use App\Models\Splitter;
+use Pipes\Models\Action;
+use Pipes\Models\Project;
+use Pipes\Models\Auth;
+use Pipes\Models\AuthAccount;
+use Pipes\Models\AuthKey;
+use Pipes\Models\Condition;
+use Pipes\Models\Host;
+use Pipes\Models\Split;
+use Pipes\Models\Splitter;
 use Illuminate\Database\Seeder;
 use Illuminate\Filesystem\Filesystem as File;
 

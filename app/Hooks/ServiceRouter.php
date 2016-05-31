@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Hooks;
+namespace Pipes\Hooks;
 
 use Illuminate\Http\Request;
 
@@ -41,7 +41,7 @@ class ServiceRouter
             return false;
         }
 
-        /** @var \App\Hooks\Handler $handler */
+        /** @var \Pipes\Hooks\Handler $handler */
         $handler = $this->handlers[$appName];
 
         if ($handler->wantsHook($request)) {

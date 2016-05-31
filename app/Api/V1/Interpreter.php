@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Api\V1;
+namespace Pipes\Api\V1;
 
-use App\Api\V1\Transformers\Validators\PipelineValidator;
-use App\Api\V1\Transformers\Factory;
+use Pipes\Api\V1\Transformers\Validators\PipelineValidator;
+use Pipes\Api\V1\Transformers\Factory;
 
 class Interpreter
 {
     /**
      * Validator for the pipeline
      *
-     * @var \App\Api\V1\Transformers\Validators\PipelineValidator
+     * @var \Pipes\Api\V1\Transformers\Validators\PipelineValidator
      */
     protected $validator;
 
     /**
      * Factory to create transformers and validators
      *
-     * @var \App\Api\V1\Transformers\Factory
+     * @var \Pipes\Api\V1\Transformers\Factory
      */
     protected $factory;
 

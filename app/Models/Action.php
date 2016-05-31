@@ -1,14 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property \App\Models\Host $host Host model related to this action
+ * @property \Pipes\Models\Host $host Host model related to this action
  */
 class Action extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'type',
+    ];
+
     /**
      * The relations to eager load on every query.
      *
@@ -46,7 +55,7 @@ class Action extends Model
      */
     public function commands()
     {
-        return $this->hasMany('App\Models\Command');
+        return $this->hasMany('Pipes\Models\Command');
     }
 
     /**
@@ -54,7 +63,7 @@ class Action extends Model
      *
      * @param string $command Command to add
      *
-     * @return \App\Models\Command
+     * @return \Pipes\Models\Command
      */
     public function addCommand($command)
     {

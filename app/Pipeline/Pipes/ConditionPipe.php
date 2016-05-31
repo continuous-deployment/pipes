@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Pipeline\Pipes;
+namespace Pipes\Pipeline\Pipes;
 
-use App\Models\Condition;
-use App\Pipeline\Pipe;
-use App\Pipeline\Pipes\Severity;
-use App\Pipeline\Traveler\Bag;
+use Pipes\Models\Condition;
+use Pipes\Pipeline\Pipe;
+use Pipes\Pipeline\Pipes\Severity;
+use Pipes\Pipeline\Traveler\Bag;
 
 class ConditionPipe extends Pipe
 {
     /**
      * Condition model
      *
-     * @var \App\Models\Condition
+     * @var \Pipes\Models\Condition
      */
     protected $condition;
 

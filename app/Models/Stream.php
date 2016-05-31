@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
-use App\Models\Project;
+use Pipes\Models\Project;
 use Illuminate\Database\Eloquent\Model;
 
 class Stream extends Model

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Pipeline\Execution\Executors;
+namespace Pipes\Pipeline\Execution\Executors;
 
-use App\Models\Action;
-use App\Pipeline\Execution\Executor;
+use Pipes\Models\Action;
+use Pipes\Pipeline\Execution\Executor;
 use phpseclib\Crypt\RSA;
 use phpseclib\Net\SSH2;
 use Illuminate\Filesystem\Filesystem as File;
@@ -54,7 +54,7 @@ class SSHExecutor extends Executor
     /**
      * Gets the SSH session using the auth given
      *
-     * @param \App\Models\Auth $auth Auth model
+     * @param \Pipes\Models\Auth $auth Auth model
      * @param \Ssh\Configuration $configuration SSH configuration object
      */
     protected function getSSHSession($auth, $host)

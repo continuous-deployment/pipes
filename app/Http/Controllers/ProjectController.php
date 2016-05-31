@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Pipes\Http\Controllers;
 
-use App\Models\Project;
+use Pipes\Models\Project;
 use Illuminate\Http\Response;
 
 class ProjectController extends Controller

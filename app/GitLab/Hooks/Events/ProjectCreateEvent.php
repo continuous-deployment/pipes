@@ -1,9 +1,9 @@
 <?php
 
-namespace App\GitLab\Hooks\Events;
+namespace Pipes\GitLab\Hooks\Events;
 
-use App\Hooks\Event;
-use App\Models\Project;
+use Pipes\Hooks\Event;
+use Pipes\Models\Project;
 use Illuminate\Http\Request;
 
 class ProjectCreateEvent extends GitLabEvent implements Event

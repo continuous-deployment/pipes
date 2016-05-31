@@ -1,11 +1,11 @@
 <?php
 
-namespace App\GitLab\Hooks;
+namespace Pipes\GitLab\Hooks;
 
-use App\GitLab\Hooks\Events\CIBuildEvent;
-use App\GitLab\Hooks\Events\ProjectCreateEvent;
-use App\GitLab\Hooks\Events\PushEvent;
-use App\Hooks\Handler;
+use Pipes\GitLab\Hooks\Events\CIBuildEvent;
+use Pipes\GitLab\Hooks\Events\ProjectCreateEvent;
+use Pipes\GitLab\Hooks\Events\PushEvent;
+use Pipes\Hooks\Handler;
 use Illuminate\Http\Request;
 
 class GitLabHandler implements Handler
@@ -20,7 +20,7 @@ class GitLabHandler implements Handler
     /**
      * Event that has been chosen to process the request
      *
-     * @var \App\Hooks\Event
+     * @var \Pipes\Hooks\Event
      */
     protected $chosenEvent;
 
@@ -63,7 +63,7 @@ class GitLabHandler implements Handler
      */
     public function canHandleRequest(Request $request)
     {
-        /** @var \App\Hooks\Event $event */
+        /** @var \Pipes\Hooks\Event $event */
         foreach ($this->events as $event) {
             if ($event->canProcessRequest($request)) {
                 $this->chosenEvent = $event;

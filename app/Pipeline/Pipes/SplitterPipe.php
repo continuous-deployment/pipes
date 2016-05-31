@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Pipeline\Pipes;
+namespace Pipes\Pipeline\Pipes;
 
-use App\Models\Splitter;
-use App\Pipeline\Pipe;
-use App\Pipeline\Pipes\Severity;
-use App\Pipeline\Traveler\Bag;
-use App\Pipeline\Traveler\Traveler;
+use Pipes\Models\Splitter;
+use Pipes\Pipeline\Pipe;
+use Pipes\Pipeline\Pipes\Severity;
+use Pipes\Pipeline\Traveler\Bag;
+use Pipes\Pipeline\Traveler\Traveler;
 
 class SplitterPipe extends Pipe
 {
     /**
      * Splitter model
      *
-     * @var \App\Models\Splitter
+     * @var \Pipes\Models\Splitter
      */
     protected $splitter;
 

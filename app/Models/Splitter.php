@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +22,6 @@ class Splitter extends Model
      */
     public function splits()
     {
-        return $this->hasMany('App\Models\Split');
+        return $this->hasMany('Pipes\Models\Split');
     }
 }

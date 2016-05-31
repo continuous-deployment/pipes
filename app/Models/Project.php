@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +26,6 @@ class Project extends Model
      */
     public function conditions()
     {
-        return $this->hasMany('App\Models\Condition');
+        return $this->hasMany('Pipes\Models\Condition');
     }
 }

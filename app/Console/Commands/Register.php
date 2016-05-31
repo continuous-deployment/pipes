@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Pipes\Console\Commands;
 
-use App\Console\Commands\Registrars\GitLabRegistrar;
+use Pipes\Console\Commands\Registrars\GitLabRegistrar;
 use Illuminate\Console\Command;
 
 class Register extends Command

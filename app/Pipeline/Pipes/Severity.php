@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pipeline\Pipes;
+namespace Pipes\Pipeline\Pipes;
 
 class Severity
 {

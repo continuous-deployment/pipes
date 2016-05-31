@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Pipeline\Traveler;
+namespace Pipes\Pipeline\Traveler;
 
-use App\Models\Stream;
-use App\Models\TravelerProgress;
-use App\Pipeline\Pipe;
-use App\Pipeline\PipeFactory;
-use App\Pipeline\PipeIdentifier;
+use Pipes\Models\Stream;
+use Pipes\Models\TravelerProgress;
+use Pipes\Pipeline\Pipe;
+use Pipes\Pipeline\PipeFactory;
+use Pipes\Pipeline\PipeIdentifier;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Database\ModelIdentifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,28 +20,28 @@ class Traveler implements ShouldQueue, SelfHandling
     /**
      * Bag that holds all the travelers items
      *
-     * @var \App\Pipeline\Traveler\Bag
+     * @var \Pipes\Pipeline\Traveler\Bag
      */
     public $bag;
 
     /**
      * Array of all the pipes this traveler has been down
      *
-     * @var \App\Pipeline\Pipe[]
+     * @var \Pipes\Pipeline\Pipe[]
      */
     protected $previousPipes = [];
 
     /**
      * Next pipe to process
      *
-     * @var \App\Pipeline\Pipe
+     * @var \Pipes\Pipeline\Pipe
      */
     public $nextPipe;
 
     /**
      * Progress of the traveler
      *
-     * @var \App\Models\TravelerProgress
+     * @var \Pipes\Models\TravelerProgress
      */
     public $progress;
 
@@ -94,7 +94,7 @@ class Traveler implements ShouldQueue, SelfHandling
      *
      * @param Model $pipeable Model to get pipe from
      *
-     * @return \App\Pipeline\Pipe|null
+     * @return \Pipes\Pipeline\Pipe|null
      */
     public function getPipeFromPipeable(Model $pipeable)
     {
@@ -111,7 +111,7 @@ class Traveler implements ShouldQueue, SelfHandling
      *
      * @param \Illuminate\Database\Eloquent\Model|array $models Array of models
      *
-     * @return \App\Pipeline\Pipe[]
+     * @return \Pipes\Pipeline\Pipe[]
      */
     public function getPipes($models)
     {

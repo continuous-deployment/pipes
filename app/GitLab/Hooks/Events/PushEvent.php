@@ -1,10 +1,10 @@
 <?php
 
-namespace App\GitLab\Hooks\Events;
+namespace Pipes\GitLab\Hooks\Events;
 
-use App\Hooks\Event;
-use App\Models\Commit;
-use App\Models\Project;
+use Pipes\Hooks\Event;
+use Pipes\Models\Commit;
+use Pipes\Models\Project;
 use Illuminate\Http\Request;
 
 class PushEvent extends GitLabEvent implements Event

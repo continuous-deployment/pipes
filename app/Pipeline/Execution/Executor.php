@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Pipeline\Execution;
+namespace Pipes\Pipeline\Execution;
 
-use App\Models\Action;
+use Pipes\Models\Action;
 
 abstract class Executor
 {

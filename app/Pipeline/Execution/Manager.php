@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Pipeline\Execution;
+namespace Pipes\Pipeline\Execution;
 
 class Manager
 {
     /**
      * All the executors that are available
      *
-     * @var \App\Pipeline\Executors\Executor[]
+     * @var \Pipes\Pipeline\Executors\Executor[]
      */
     protected $executors;
 
@@ -39,7 +39,7 @@ class Manager
      *
      * @param  string $type Type to search for
      *
-     * @return \App\Pipeline\Execution\Executor|null
+     * @return \Pipes\Pipeline\Execution\Executor|null
      */
     public function getByType($type)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Transformers\Validators\Rules;
+namespace Pipes\Api\V1\Transformers\Validators\Rules;
 
 class ModelRule
 {
@@ -21,7 +21,7 @@ class ModelRule
             return false;
         }
 
-        $modelClassName = '\App\Models\\' . title_case($value->type);
+        $modelClassName = '\Pipes\Models\\' . title_case($value->type);
 
         if (!class_exists($modelClassName)) {
             return false;

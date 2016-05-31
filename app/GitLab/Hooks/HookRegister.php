@@ -1,8 +1,8 @@
 <?php
 
-namespace App\GitLab\Hooks;
+namespace Pipes\GitLab\Hooks;
 
-use App\GitLab\GitLabManager;
+use Pipes\GitLab\GitLabManager;
 
 class HookRegister
 {
@@ -68,7 +68,7 @@ class HookRegister
      */
     public function registerSystemHooksOnInstances()
     {
-        /** @var \App\GitLab\GitLab $instance */
+        /** @var \Pipes\GitLab\GitLab $instance */
         foreach ($this->gitlab->getInstances() as $instance) {
             $instance->sendApiRequest(
                 'POST',

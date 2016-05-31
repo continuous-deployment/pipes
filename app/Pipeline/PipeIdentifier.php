@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Pipeline;
+namespace Pipes\Pipeline;
 
-use App\Pipeline\Pipe;
+use Pipes\Pipeline\Pipe;
 use Illuminate\Contracts\Database\ModelIdentifier;
 
 class PipeIdentifier

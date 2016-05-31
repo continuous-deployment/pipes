@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pipeline\Traveler;
+namespace Pipes\Pipeline\Traveler;
 
 use ReflectionClass;
 use Illuminate\Support\Arr;

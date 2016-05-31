@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Api\V1\Transformers\Types;
+namespace Pipes\Api\V1\Transformers\Types;
 
-use App\Api\V1\Transformers\Transformer;
-use App\Models\Condition;
+use Pipes\Api\V1\Transformers\Transformer;
+use Pipes\Models\Condition;
 use Illuminate\Database\Eloquent\Model;
 
 class ConditionTransformer extends Transformer

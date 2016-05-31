@@ -1,10 +1,5 @@
 <?php
-use App\Api\GitLab\GitLabManager;
-use App\Models\Stream;
-use App\Models\Project;
-use App\Models\Condition;
-use App\Pipeline\Pipeline;
-use App\Pipeline\Traveler\Traveler;
+use Pipes\GitLab\GitLabManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,23 +12,22 @@ use App\Pipeline\Traveler\Traveler;
 |
 */
 
-$app->get(
+$router->get(
     '/',
-    function () use ($app) {
-        $message = str_replace('Lumen.', 'Pipes.', $app->welcome());
-        return $message;
+    function () {
+        return view('welcome');
     }
 );
 
 // route for easier testing using query strings
-$app->get(
+$router->get(
     '{appName}/{hostId}/hooks/catch',
     [
         'as'   => 'hook',
         'uses' => 'HookController@recieve',
     ]
 );
-$app->post(
+$router->post(
     '{appName}/{hostId}/hooks/catch',
     [
         'as'   => 'hook',
@@ -41,7 +35,7 @@ $app->post(
     ]
 );
 
-$app->get(
+$router->get(
     'test/auth',
     function () {
         $gitlabs = new GitLabManager();
@@ -52,7 +46,7 @@ $app->get(
 );
 
 // projects
-$app->get(
+$router->get(
     '/projects',
     [
         'as'   => 'projects',
@@ -60,7 +54,7 @@ $app->get(
     ]
 );
 
-$app->get(
+$router->get(
     '/projects/{projectId}',
     [
         'as'   => 'projects',

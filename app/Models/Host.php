@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property \App\Models\Auth $auth Auth model related to this host
+ * @property \Pipes\Models\Auth $auth Auth model related to this host
  */
 class Host extends Model
 {
@@ -35,6 +35,6 @@ class Host extends Model
      */
     public function auth()
     {
-        return $this->belongsTo('App\Models\Auth');
+        return $this->belongsTo('Pipes\Models\Auth');
     }
 }

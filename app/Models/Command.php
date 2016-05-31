@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +22,6 @@ class Command extends Model
      */
     public function action()
     {
-        return $this->belongsTo('App\Models\Action');
+        return $this->belongsTo('Pipes\Models\Action');
     }
 }

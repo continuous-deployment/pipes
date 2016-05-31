@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Api\V1\Transformers\Types;
+namespace Pipes\Api\V1\Transformers\Types;
 
-use App\Api\V1\Transformers\Transformer;
-use App\Models\Host;
-use App\Models\Action;
-use App\Models\Command;
+use Pipes\Api\V1\Transformers\Transformer;
+use Pipes\Models\Host;
+use Pipes\Models\Action;
+use Pipes\Models\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -49,18 +49,21 @@ class ActionTransformer extends Transformer
             $action->save();
         }
 
-        $commands = $data->commands;
-        $commandModels = [];
+        if (isset($data->commands)) {
+            $commands = $data->commands;
+            $commandModels = [];
 
-        foreach ($commands as $command) {
-            $commandModel = new Command();
-            $commandModel->command = $command;
-            $commandModel->save();
+            foreach ($commands as $command) {
+                $commandModel = new Command();
+                $commandModel->command = $command;
+                $commandModel->save();
 
-            $commandModels[] = $commandModel;
+                $commandModels[] = $commandModel;
+            }
+
+            $action->commands()->saveMany($commandModels);
         }
 
-        $action->commands()->saveMany($commandModels);
 
         return $action;
     }

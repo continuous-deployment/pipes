@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GitLab;
+namespace Pipes\GitLab;
 
 class GitLabManager
 {
@@ -81,7 +81,7 @@ class GitLabManager
      */
     public function getInstanceByHostId($hostId)
     {
-        /** @var \App\GitLab\GitLab $instance */
+        /** @var \Pipes\GitLab\GitLab $instance */
         foreach ($this->instances as $instance) {
             if ($instance->getHostId() == $hostId) {
                 return $instance;

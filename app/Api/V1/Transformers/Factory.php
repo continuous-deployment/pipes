@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Transformers;
+namespace Pipes\Api\V1\Transformers;
 
 use ReflectionException;
 
@@ -25,7 +25,7 @@ class Factory
      *
      * @param string $type Type of transformer to make
      *
-     * @return \App\Api\V1\Transformers\Transformer|null
+     * @return \Pipes\Api\V1\Transformers\Transformer|null
      */
     public function make($type)
     {
@@ -33,7 +33,7 @@ class Factory
             return $this->transformers[$type];
         }
 
-        $className = 'App\Api\V1\Transformers\Types\\' .
+        $className = 'Pipes\Api\V1\Transformers\Types\\' .
             title_case($type) . 'Transformer';
 
         try {
@@ -52,7 +52,7 @@ class Factory
      *
      * @param string $type Type of validator to make
      *
-     * @return \App\Api\V1\Transformers\Validator|null
+     * @return \Pipes\Api\V1\Transformers\Validator|null
      */
     public function makeValidator($type)
     {
@@ -60,7 +60,7 @@ class Factory
             return $this->validators[$type]->reset();
         }
 
-        $className = 'App\Api\V1\Transformers\Validators\\' .
+        $className = 'Pipes\Api\V1\Transformers\Validators\\' .
         title_case($type) . 'Validator';
 
         try {

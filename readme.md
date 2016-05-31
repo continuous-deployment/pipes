@@ -1,48 +1,27 @@
-# Pipes #
+# Laravel PHP Framework
 
-[![Build Status](https://travis-ci.org/continuous-deployment/pipes.svg?branch=master)](https://travis-ci.org/continuous-deployment/pipes)
-[![Code Climate](https://codeclimate.com/github/continuous-deployment/pipes/badges/gpa.svg)](https://codeclimate.com/github/continuous-deployment/pipes)
-[![Build Status](https://drone.continuous-deployment.software/api/badges/continuous-deployment/pipes/status.svg)](https://drone.continuous-deployment.software/continuous-deployment/pipes)
+[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
+[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
+[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
 
-### Installation via docker ###
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
 
-Docker Compose is set up for this repository
+Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-docker-compose will need to be installed on your system https://docs.docker.com/compose/install
+## Official Documentation
 
-```bash
-docker-compose up
-```
+Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-This will download and link all required containers and host your application on port 9000
+## Contributing
 
-It will auto name the containers with a prefix of the folder name and suffixed with a number starting from 1.
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-e.g. the folder is called pipes the containers created will be called:
-- pipes_php_1
-- pipes_mysql_1
+## Security Vulnerabilities
 
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
 
-To run commands inside the container you can open up a shell:
-```bash
-docker exec -it pipes_php_1 bash
-```
+## License
 
-or you ca run the command you want directly:
-```bash
-docker exec -it pipes_php_1 php composer.phar install
-```
-
-## Multiple Runners ##
-
-If you want to run more than a single runner you can do so with the scale command:
-
-```bash
-docker-compose scale runner=15
-```
-
-This will scale the group of containers up to 15 runners.
-
-The reverse setting the scale back down to 1 will remove the newer containers.
-
-You may scale up and down as much as you like.
+The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).

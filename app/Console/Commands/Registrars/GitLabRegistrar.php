@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Console\Commands\Registrars;
+namespace Pipes\Console\Commands\Registrars;
 
-use App\GitLab\GitLab;
-use App\GitLab\GitLabManager;
-use App\GitLab\Hooks\HookRegister;
+use Pipes\GitLab\GitLab;
+use Pipes\GitLab\GitLabManager;
+use Pipes\GitLab\Hooks\HookRegister;
 use Illuminate\Console\Command;
 
 class GitLabRegistrar implements Registrar

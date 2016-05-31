@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
-use App\Models\Stream;
+use Pipes\Models\Stream;
 use Illuminate\Database\Eloquent\Model;
 
 class PipeLog extends Model

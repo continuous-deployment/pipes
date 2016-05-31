@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace Pipes\Models;
 
 use foo;
-use App\Pipeline\Pipe;
-use App\Pipeline\Traveler\Traveler;
+use Pipes\Pipeline\Pipe;
+use Pipes\Pipeline\Traveler\Traveler;
 use Illuminate\Database\Eloquent\Model;
 
 class TravelerProgress extends Model
@@ -77,7 +77,7 @@ class TravelerProgress extends Model
      *
      * @param Traveler  $traveler Traveler to get bag from
      *
-     * @return \App\Pipeline\Traveler\Bag
+     * @return \Pipes\Pipeline\Traveler\Bag
      */
     protected function getBagFromTraveler(Traveler $traveler)
     {

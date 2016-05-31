@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Pipeline;
+namespace Pipes\Pipeline;
 
-use App\Models\Stream;
-use App\Pipeline\Traveler\Traveler;
+use Pipes\Models\Stream;
+use Pipes\Pipeline\Traveler\Traveler;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
@@ -12,7 +12,7 @@ class Pipeline
     /**
      * Object that will get passed to each pipe
      *
-     * @var \App\Pipeline\Traveler\Traveler
+     * @var \Pipes\Pipeline\Traveler\Traveler
      */
     protected $traveler;
 

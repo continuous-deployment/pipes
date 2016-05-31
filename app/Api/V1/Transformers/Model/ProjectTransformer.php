@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\V1\Transformers\Model;
+namespace Pipes\Api\V1\Transformers\Model;
 
-use App\Models\Project;
+use Pipes\Models\Project;
 use League\Fractal\TransformerAbstract;
 
 class ProjectTransformer extends TransformerAbstract

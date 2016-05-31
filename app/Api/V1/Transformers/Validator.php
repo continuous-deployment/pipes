@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Api\V1\Transformers;
+namespace Pipes\Api\V1\Transformers;
+
+use Illuminate\Support\MessageBag;
 
 abstract class Validator
 {
@@ -56,6 +58,7 @@ abstract class Validator
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -79,12 +82,12 @@ abstract class Validator
         $attributes = [];
 
         if (isset($this->data->attributes)) {
-            $attributes = (array)$this->data->attributes;
+            $attributes = (array) $this->data->attributes;
         }
 
         /** @var \Illuminate\Validation\Factory $validationFactory */
         $validationFactory = app('validator');
-        $attrValidator = $validationFactory->make(
+        $attrValidator     = $validationFactory->make(
             $attributes,
             $this->rules,
             $this->messages
@@ -92,7 +95,7 @@ abstract class Validator
         $attrPasses = $attrValidator->passes();
 
         $relationValidator = $validationFactory->make(
-            (array)$this->data,
+            (array) $this->data,
             $this->relationshipRules,
             $this->relationshipMessages
         );
@@ -116,5 +119,18 @@ abstract class Validator
     public function fails()
     {
         return !$this->passes();
+    }
+
+    /**
+     * Resets the validator back to a fresh instance.
+     *
+     * @return self
+     */
+    public function reset()
+    {
+        $this->setData(null);
+        $this->errorMessages =  new MessageBag();
+
+        return $this;
     }
 }

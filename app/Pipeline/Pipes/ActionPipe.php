@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Pipeline\Pipes;
+namespace Pipes\Pipeline\Pipes;
 
-use App\Models\Action;
-use App\Pipeline\Pipe;
-use App\Pipeline\Traveler\Bag;
+use Pipes\Models\Action;
+use Pipes\Pipeline\Pipe;
+use Pipes\Pipeline\Traveler\Bag;
 
 class ActionPipe extends Pipe
 {
     /**
      * Action model
      *
-     * @var \App\Models\Action
+     * @var \Pipes\Models\Action
      */
     protected $action;
 
@@ -58,7 +58,7 @@ class ActionPipe extends Pipe
     {
         $type = $this->action->type;
 
-        /** @var \App\Pipeline\Execution\Manager $executorManager */
+        /** @var \Pipes\Pipeline\Execution\Manager $executorManager */
         $executorManager = app('ExecutorManager');
         $executor = $executorManager->getByType($type);
 

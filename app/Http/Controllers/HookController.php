@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Pipes\Http\Controllers;
 
-use App\Models\Stream;
-use App\Models\Project;
-use App\Pipeline\Pipeline;
-use App\Pipeline\Traveler\Traveler;
+use Pipes\Models\Stream;
+use Pipes\Models\Project;
+use Pipes\Pipeline\Pipeline;
+use Pipes\Pipeline\Traveler\Traveler;
 use Illuminate\Http\Request;
 
 class HookController extends Controller
@@ -20,7 +20,7 @@ class HookController extends Controller
      */
     public function recieve(Request $request, $appName)
     {
-        /** @var \App\Hooks\ServiceRouter $serviceRouter */
+        /** @var \Pipes\Hooks\ServiceRouter $serviceRouter */
         $serviceRouter = app('ServiceRouter');
         $result = $serviceRouter->route($request, $appName);
 
@@ -54,7 +54,7 @@ class HookController extends Controller
      */
     protected function processProject($result)
     {
-        /** @var \App\Models\Project $project */
+        /** @var \Pipes\Models\Project $project */
         $project = $result['project'];
         $conditions = $project->conditions;
         foreach ($conditions as $condition) {

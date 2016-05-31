@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\V1\Transformers\Validators;
+namespace Pipes\Api\V1\Transformers\Validators;
 
-use App\Api\V1\Transformers\Factory;
+use Pipes\Api\V1\Transformers\Factory;
 use Illuminate\Support\Arr;
 
 class PipelineValidator
@@ -17,7 +17,7 @@ class PipelineValidator
     /**
      * Factory to create transformers and validators
      *
-     * @var \App\Api\V1\Transformers\Factory
+     * @var \Pipes\Api\V1\Transformers\Factory
      */
     protected $factory;
 

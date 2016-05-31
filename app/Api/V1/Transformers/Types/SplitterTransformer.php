@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\V1\Transformers\Types;
+namespace Pipes\Api\V1\Transformers\Types;
 
-use App\Api\V1\Transformers\Transformer;
-use App\Models\Split;
-use App\Models\Splitter;
+use Pipes\Api\V1\Transformers\Transformer;
+use Pipes\Models\Split;
+use Pipes\Models\Splitter;
 use Illuminate\Database\Eloquent\Model;
 
 class SplitterTransformer extends Transformer

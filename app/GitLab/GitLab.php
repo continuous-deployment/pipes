@@ -1,8 +1,8 @@
 <?php
 
-namespace App\GitLab;
+namespace Pipes\GitLab;
 
-use App\Models\Host;
+use Pipes\Models\Host;
 use GuzzleHttp;
 
 /**

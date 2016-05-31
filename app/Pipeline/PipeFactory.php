@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Pipeline;
+namespace Pipes\Pipeline;
 
-use App\Pipeline\PipeIdentifier;
+use Pipes\Pipeline\PipeIdentifier;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
@@ -13,7 +13,7 @@ class PipeFactory
      *
      * @param mixed $identifier This can be a Model or a class string
      *
-     * @return \App\Pipeline\Pipe|null
+     * @return \Pipes\Pipeline\Pipe|null
      */
     public static function make($identifier)
     {
@@ -36,7 +36,7 @@ class PipeFactory
      *
      * @param  PipeIdentifier $identifier Identifier to make from
      *
-     * @return \App\Pipeline\Pipe|null
+     * @return \Pipes\Pipeline\Pipe|null
      */
     public static function makeFromPipeIdentifier(PipeIdentifier $identifier)
     {
@@ -61,13 +61,13 @@ class PipeFactory
      *
      * @param Model $model Model to be given to a pipe
      *
-     * @return \App\Pipeline\Pipe|null
+     * @return \Pipes\Pipeline\Pipe|null
      */
     protected static function makeFromModel(Model $model)
     {
         $reflectionModel = new ReflectionClass($model);
         $className       = $reflectionModel->getShortName();
-        $pipeClass       = '\App\Pipeline\Pipes\\' . $className . 'Pipe';
+        $pipeClass       = '\Pipes\Pipeline\Pipes\\' . $className . 'Pipe';
 
         if (class_exists($pipeClass)) {
             $mysteriousPipe = new $pipeClass($model);

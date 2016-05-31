@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Events;
-
-use Illuminate\Queue\SerializesModels;
+namespace Pipes\Events;
 
 abstract class Event
 {
-    use SerializesModels;
+    //
 }

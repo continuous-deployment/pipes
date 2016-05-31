@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Hooks;
+namespace Pipes\Hooks;
 
 use Illuminate\Http\Request;
 
